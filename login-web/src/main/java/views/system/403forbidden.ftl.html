@@ -1,0 +1,11 @@
+<#import "../layout/system.layout.ftl.html" as layout> 
+<@layout.systemLayout i18n("system.error403")>    
+
+	<h1>${i18n("system.error403")}!</h1>
+    <p>${i18n("system.error403.message")}.</p>
+    <br/>
+    <#if (message)??>
+    <p>${message}</p>
+    </#if>
+
+</@layout.systemLayout>

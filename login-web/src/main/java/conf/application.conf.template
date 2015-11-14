@@ -1,0 +1,50 @@
+# The main properties file to configure your application
+#
+# Properties can be prefixed by "%".
+# "%"" matches a mode you can set as system property. For instance when you
+# are using maven you can do: mvn -Dmode=test jetty:run
+#
+# Using that the following property:
+# %test.myproperty=test property
+# would overwrite the property
+# myproperty=my property
+#
+# You can define as many environments as you want. Simply set them in the mode.
+application.name=ninja demo application
+
+application.cookie.prefix=Raspbeat
+
+#ISO Language Code, optionally followed by a valid ISO Country Code. 
+application.languages=en
+
+application.session.expire_time_in_seconds=3600
+application.session.send_only_if_changed=true
+application.session.transferred_over_https_only=false
+application.secret = <APPLICATION_SECRET>
+application.static.asset.basedir = <BASE_FS_PATH>
+application.startup.url = http://localhost:8080/ui/index.html
+application.downtime.hours = 13
+
+
+## API authentication
+api.tokens=token1,token2,token3
+
+
+
+## UI authentication
+auth.token.ttl=3600
+auth.callback.url=http://localhost:8080/oauth2callback
+auth.google.key=<GOOGLE_KEY>
+auth.google.secret=<GOOGLE_SECRET>
+auth.success.url=http://localhost:8080/
+auth.error.url=http://localhost:8080/login
+
+## db settings
+ninja.mongodb.host=         //The address of your mongodb, default: localhost
+ninja.mongodb.port=         //The port of you mongodb, default: 27017
+ninja.mongodb.dbname=       //The name of the database, default: MyMongoDB
+ninja.mongodb.user=         //The username for authentication, no default value
+ninja.mongodb.pass=         //The password for authentication, no default value
+ninja.mongodb.authdb=       //The db where the user is identified, default: MyMongoDB
+ninja.morphia.package=      //The package name of you morphia models, default: models
+ninja.morphia.init=         //Whether to init morphia by default, default: false
