@@ -16,16 +16,20 @@
 
 package conf;
 
-import ninja.AssetsController;
+import controllers.HomeController;
+import net.binggl.ninja.oauth.NinjaOauthController;
 import ninja.Router;
 import ninja.application.ApplicationRoutes;
-import controllers.HomeController;
 
 public class Routes implements ApplicationRoutes {
 
     @Override
     public void init(Router router) {  
         
+    	// authentication routes
+        router.GET().route("/startauth").with(NinjaOauthController.class, "startauth");
+        router.GET().route("/oauth2callback").with(NinjaOauthController.class, "oauth2callback");
+    	
         ///////////////////////////////////////////////////////////////////////
         // Index / Catchall shows index page
         ///////////////////////////////////////////////////////////////////////

@@ -13,33 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package conf;
+
+import org.apache.commons.lang3.StringUtils;
+import org.pac4j.oauth.profile.google2.Google2Profile;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 
+import net.binggl.ninja.oauth.NinjaOauthModule;
+import net.binggl.ninja.oauth.OauthAuthorizationService;
+import ninja.Context;
+
 @Singleton
 public class Module extends AbstractModule {
-    
 
+    @Override
     protected void configure() {
-        
-    	// bind your injections here!
-//    	bind(OauthClient.class).to(GoogleClient.class);
-//    	bind(SecurityService.class).to(SecurityServiceImpl.class);
-//    	bind(UserRepository.class).to(MongoDbUserRepository.class);
-//    	bind(BeatRepository.class).to(MongoDBBeatRepository.class);
-//    	bind(ProfileCache.class).to(NinjaProfileCache.class);
-//    	bind(ProfileService.class).to(CacheEnabledProfileService.class);
-//
-//		// helpers
-//		bind(InternationalizationHelper.class);
-//    	bind(CommonResults.class);
-    	
-    	// startup
-    	bind(CustomObjectMapper.class);
-        
+
+        install(new NinjaOauthModule());
+
+        // startup
+        bind(CustomObjectMapper.class);
+
+        bind(OauthAuthorizationService.class).toInstance(new OauthAuthorizationService() {
+            @Override
+            public boolean lookupAndProcessProfile(Context context, Google2Profile profile) {
+                boolean profileValid = false;
+                if (profile != null && StringUtils.isNotEmpty(profile.getAccessToken())) {
+                    profileValid = true;
+                    context.getSession().put("id", profile.getId());
+                }
+                return profileValid;
+            }
+        });
+
     }
 
 }
