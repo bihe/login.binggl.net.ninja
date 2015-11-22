@@ -1,14 +1,15 @@
 package controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.inject.Singleton;
+
 import extractors.AuthenticatedUser;
 import net.binggl.login.common.models.User;
 import ninja.Context;
 import ninja.Result;
 import ninja.Results;
-
-import com.google.inject.Singleton;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**
@@ -17,16 +18,16 @@ import org.slf4j.LoggerFactory;
  * otherwise the user is forwarded to the application dashboard
  */
 @Singleton
-public class HomeController {
+public class HomeController extends AbstractController {
 
-    // members
     private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
     public Result index(Context context, @AuthenticatedUser User user) {
 
         if(user == null) {
+        	
             logger.debug("No authenticated user available show login screen!");
-            return Results.html();
+            return this.processTemplateResult(Results.html());
         }
 
         return Results.redirect("dashboard/");

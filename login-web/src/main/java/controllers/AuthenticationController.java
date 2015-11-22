@@ -7,5 +7,5 @@ import javax.inject.Singleton;
  * @author henrik
  */
 @Singleton
-public class AuthenticationController {
+public class AuthenticationController extends AbstractController {
 }

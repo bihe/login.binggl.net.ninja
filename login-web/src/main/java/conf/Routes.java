@@ -17,9 +17,11 @@
 package conf;
 
 import controllers.HomeController;
-import net.binggl.ninja.oauth.NinjaOauthController;
+import controllers.SecurityAwareAssetsController;
 import ninja.Router;
 import ninja.application.ApplicationRoutes;
+
+import net.binggl.ninja.oauth.NinjaOauthController;
 
 public class Routes implements ApplicationRoutes {
 
@@ -27,9 +29,14 @@ public class Routes implements ApplicationRoutes {
     public void init(Router router) {  
         
     	// authentication routes
-        router.GET().route("/startauth").with(NinjaOauthController.class, "startauth");
+        router.GET().route("/login").with(NinjaOauthController.class, "startauth");
         router.GET().route("/oauth2callback").with(NinjaOauthController.class, "oauth2callback");
     	
+        
+        
+        // static content
+        router.GET().route("/assets/{fileName: .*}").with(SecurityAwareAssetsController.class, "serveStatic");
+        
         ///////////////////////////////////////////////////////////////////////
         // Index / Catchall shows index page
         ///////////////////////////////////////////////////////////////////////

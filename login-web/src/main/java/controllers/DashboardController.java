@@ -8,5 +8,5 @@ import com.google.inject.Singleton;
  */
 @Singleton
 // filter necessary
-public class DashboardController {
+public class DashboardController extends AbstractController {
 }
