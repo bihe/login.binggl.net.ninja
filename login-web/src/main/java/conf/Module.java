@@ -15,15 +15,13 @@
  */
 package conf;
 
-import org.apache.commons.lang3.StringUtils;
-import org.pac4j.oauth.profile.google2.Google2Profile;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 
+import net.binggl.login.core.CoreModule;
 import net.binggl.ninja.oauth.NinjaOauthModule;
 import net.binggl.ninja.oauth.OauthAuthorizationService;
-import ninja.Context;
+import service.OauthMongoDbAuthorizationService;
 
 @Singleton
 public class Module extends AbstractModule {
@@ -32,22 +30,11 @@ public class Module extends AbstractModule {
     protected void configure() {
 
         install(new NinjaOauthModule());
+        install(new CoreModule());
 
         // startup
         bind(CustomObjectMapper.class);
 
-        bind(OauthAuthorizationService.class).toInstance(new OauthAuthorizationService() {
-            @Override
-            public boolean lookupAndProcessProfile(Context context, Google2Profile profile) {
-                boolean profileValid = false;
-                if (profile != null && StringUtils.isNotEmpty(profile.getAccessToken())) {
-                    profileValid = true;
-                    context.getSession().put("id", profile.getId());
-                }
-                return profileValid;
-            }
-        });
-
+        bind(OauthAuthorizationService.class).to(OauthMongoDbAuthorizationService.class);
     }
-
 }

@@ -21,7 +21,7 @@ import ninja.Results;
 public class HomeController extends AbstractController {
 
     private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
-
+    
     public Result index(Context context, @AuthenticatedUser User user) {
 
         if(user == null) {
@@ -31,6 +31,10 @@ public class HomeController extends AbstractController {
         }
 
         return Results.redirect("dashboard/");
+    } 
+    
+    public Result login() {
+        return this.processTemplateResult(Results.html().template("views/HomeController/index.ftl.html"));
     } 
 }
  

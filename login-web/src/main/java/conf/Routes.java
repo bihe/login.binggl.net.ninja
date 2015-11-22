@@ -33,6 +33,8 @@ public class Routes implements ApplicationRoutes {
         router.GET().route("/oauth2callback").with(NinjaOauthController.class, "oauth2callback");
     	
         
+        router.GET().route("/login").with(HomeController.class, "login");
+        
         
         // static content
         router.GET().route("/assets/{fileName: .*}").with(SecurityAwareAssetsController.class, "serveStatic");

@@ -152,7 +152,7 @@
             <artifactId>ninja-google-oauth-module</artifactId>
             <version>1.0.0</version>
         </dependency>
-       
+        
         <dependency>
             <groupId>org.ninjaframework</groupId>
             <artifactId>ninja-test-utilities</artifactId>
