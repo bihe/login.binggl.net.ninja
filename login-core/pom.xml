@@ -1,46 +1,52 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                              http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>net.binggl</groupId>
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>net.binggl</groupId>
 		<artifactId>login-root</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
-    </parent>
-    <artifactId>login-core</artifactId>
-    <packaging>jar</packaging>
+	</parent>
+	<artifactId>login-core</artifactId>
+	<packaging>jar</packaging>
 
-    <name>login core logic</name>
+	<name>login core logic</name>
 
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <configuration>
-                        <testFailureIgnore>true</testFailureIgnore>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement> 
-    </build>
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<configuration>
+						<testFailureIgnore>true</testFailureIgnore>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 
-    <dependencies>
-        
-		 <dependency>
-		    <groupId>net.binggl</groupId>
-		    <artifactId>ninja-mongodb-module</artifactId>
-		    <version>1.0.1</version>
+	<dependencies>
+
+		<dependency>
+			<groupId>net.binggl</groupId>
+			<artifactId>ninja-mongodb-module</artifactId>
+			<version>1.0.1</version>
 		</dependency>
-		
-		
-		 <dependency>
-            <groupId>net.binggl</groupId>
-            <artifactId>login-common</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-        </dependency>
-        
-    </dependencies>
+
+
+		<dependency>
+			<groupId>net.binggl</groupId>
+			<artifactId>login-common</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+
+
+		<dependency>
+		    <groupId>com.auth0</groupId>
+		    <artifactId>java-jwt</artifactId>
+		    <version>2.1.0</version>
+		</dependency>
+
+	</dependencies>
 </project>

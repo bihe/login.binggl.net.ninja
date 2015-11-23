@@ -7,6 +7,11 @@ package net.binggl.login.common;
 public class Constants {
 
 	/**
+	 * the secret used for token signing
+	 */
+	public final static String AUTH_TOKEN_SECRET = "auth.token.secret";
+	
+	/**
 	 * token cookie
 	 */
 	public final static String TOKEN_COOKIE_NAME = "application.cookie.token.name";

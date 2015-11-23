@@ -60,8 +60,15 @@
     
     	<dependency>
             <groupId>org.ninjaframework</groupId>
-            <artifactId>ninja-standalone</artifactId>
+            <artifactId>ninja-core</artifactId>
             <version>${ninja.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.ninjaframework</groupId>
+            <artifactId>ninja-test-utilities</artifactId>
+            <version>${ninja.version}</version>
+            <scope>test</scope>
         </dependency>
     
     	<!-- i want to serialize jodatime -->
