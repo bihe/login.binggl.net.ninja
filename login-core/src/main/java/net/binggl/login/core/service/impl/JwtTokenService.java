@@ -1,8 +1,14 @@
 package net.binggl.login.core.service.impl;
 
-import static net.binggl.login.common.Constants.*;
+import static net.binggl.login.common.Constants.COOKIE_DOMAIN;
+import static net.binggl.login.common.Constants.COOKIE_HTTP_ONLY;
+import static net.binggl.login.common.Constants.COOKIE_MAXAGE;
+import static net.binggl.login.common.Constants.COOKIE_PATH;
+import static net.binggl.login.common.Constants.COOKIE_SECURE;
+import static net.binggl.login.common.Constants.TOKEN_COOKIE_NAME;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.auth0.jwt.JWTSigner;
@@ -20,24 +26,24 @@ public class JwtTokenService implements TokenService {
 	private static final String USER_ID = "UserId";
 	private static final String DISPLAYNAME = "DisplayName";
 	private static final String EMAIL = "Email";
-	
-	
+	private static final String CLAIMS = "Claims";
+
 	private NinjaProperties properties;
-	
+
 	@Inject
 	public JwtTokenService(NinjaProperties properties) {
 		this.properties = properties;
 	}
-	
+
 	@Override
 	public String getToken(User user, String secret) {
-		if(user == null)
+		if (user == null)
 			return null;
-		
+
 		JWTSigner jwtSigner = new JWTSigner(secret);
 		Map<String, Object> payload = this.getUserMap(user);
-		
-        String token = jwtSigner.sign(payload);
+
+		String token = jwtSigner.sign(payload);
 		return token;
 	}
 
@@ -51,54 +57,54 @@ public class JwtTokenService implements TokenService {
 	public String getTokenFromCookie(Context context) {
 		String token = null;
 		Cookie cookie = context.getCookie(properties.get(TOKEN_COOKIE_NAME));
-		if(cookie != null) {
+		if (cookie != null) {
 			token = cookie.getValue();
 		}
 		return token;
 	}
-	
+
 	@Override
 	public User verifyToken(String token, String secret) {
 		User user = null;
 		JWTVerifier jwtVerifier = new JWTVerifier(secret);
 		try {
 			Map<String, Object> payload = jwtVerifier.verify(token);
-			if(payload != null) {
+			if (payload != null) {
 				user = this.getUserObject(payload);
 			}
-		} catch(Exception EX) {
+		} catch (Exception EX) {
 			throw new RuntimeException(EX);
 		}
-		
+
 		return user;
 	}
-	
-	
-	
+
 	private Cookie createCookie(Context context, String token) {
-		Cookie cookie = new Cookie(properties.get(TOKEN_COOKIE_NAME), token, 
-				"", 
-				properties.get(COOKIE_DOMAIN), 
-				properties.getInteger(COOKIE_MAXAGE),
-				properties.get(COOKIE_PATH),
+		Cookie cookie = new Cookie(properties.get(TOKEN_COOKIE_NAME), token, "", 
+				properties.get(COOKIE_DOMAIN),
+				properties.getInteger(COOKIE_MAXAGE), 
+				properties.get(COOKIE_PATH), 
 				properties.getBoolean(COOKIE_SECURE),
-				properties.getBoolean(COOKIE_HTTP_ONLY)
-				); 
+				properties.getBoolean(COOKIE_HTTP_ONLY));
 		return cookie;
 	}
-	
+
 	private Map<String, Object> getUserMap(User user) {
 		Map<String, Object> payload = new HashMap<String, Object>();
-        payload.put(USER_ID, user.getId());
-        payload.put(DISPLAYNAME, user.getDisplayName());
-        payload.put(EMAIL, user.getEmail());
-        return payload;
+		payload.put(USER_ID, user.getId());
+		payload.put(DISPLAYNAME, user.getDisplayName());
+		payload.put(EMAIL, user.getEmail());
+		payload.put(CLAIMS, user.getSitePermissions());
+		return payload;
 	}
-	
+
+	@SuppressWarnings("unchecked")
 	private User getUserObject(Map<String, Object> payload) {
-		User user = new User((String)payload.get(EMAIL), 
-				(String)payload.get(DISPLAYNAME),
-				(String)payload.get(USER_ID));
+		User user = new User((String) payload.get(EMAIL), 
+				(String) payload.get(DISPLAYNAME),
+				(String) payload.get(USER_ID)
+				);
+		user.setSitePermissions((List<String>) payload.get(CLAIMS));
 		return user;
 	}
 

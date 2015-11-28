@@ -18,6 +18,11 @@ public class UserServiceImpl implements UserService {
 	public User findUserByEmail(String email) {
 		net.binggl.login.core.entity.User entityUser = userRepo.getUserByEmail(email);
 		if(entityUser != null) {
+			
+			
+			// TODO: format the site-permissions in a manageable way
+			
+			
 			User user = new User(entityUser.getEmail(),
 					entityUser.getDisplayName(),
 					entityUser.getUserName());

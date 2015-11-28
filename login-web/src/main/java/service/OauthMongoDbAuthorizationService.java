@@ -7,19 +7,22 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
-import controllers.HomeController;
+import static net.binggl.login.common.Constants.AUTH_TOKEN_SECRET;
 import net.binggl.login.common.models.User;
 import net.binggl.login.core.service.TokenService;
 import net.binggl.login.core.service.UserService;
 import net.binggl.ninja.oauth.OauthAuthorizationService;
+
 import ninja.Context;
+import ninja.utils.NinjaProperties;
 
 public class OauthMongoDbAuthorizationService implements OauthAuthorizationService {
 
-	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
+	private static final Logger logger = LoggerFactory.getLogger(OauthMongoDbAuthorizationService.class);
 	
 	@Inject private UserService userService;
-	@Inject private TokenService tokenService; 
+	@Inject private TokenService tokenService;
+	@Inject private NinjaProperties properties; 
 	
 	
 	@Override
@@ -29,7 +32,7 @@ public class OauthMongoDbAuthorizationService implements OauthAuthorizationServi
 			
 			User user = userService.findUserByEmail(profile.getEmail());
 			if(user != null) {
-				String token = tokenService.getToken(user);
+				String token = tokenService.getToken(user, this.getTokenSecret());
 				logger.debug("Got a user {}  create a token and save the token {}", user, token);
 				
 				if(StringUtils.isNotEmpty(token)) {
@@ -45,5 +48,9 @@ public class OauthMongoDbAuthorizationService implements OauthAuthorizationServi
 		}
 		return false;
 	}
-
+	
+		
+	private String getTokenSecret() {
+		return properties.getOrDie(AUTH_TOKEN_SECRET);
+	}
 }

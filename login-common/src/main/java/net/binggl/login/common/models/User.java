@@ -1,5 +1,7 @@
 package net.binggl.login.common.models;
 
+import java.util.List;
+
 /**
  * define a user
  * @author henrik
@@ -9,6 +11,7 @@ public class User {
     private String email;
     private String displayName;
     private String id;
+    private List<String> sitePermissions;
 
     public User(String email, String displayName, String id) {
         this.email = email;
@@ -39,8 +42,16 @@ public class User {
     public void setId(String id) {
         this.id = id;
     }
+    
+    public List<String> getSitePermissions() {
+		return sitePermissions;
+	}
 
-    @Override
+	public void setSitePermissions(List<String> sitePermissions) {
+		this.sitePermissions = sitePermissions;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

@@ -46,7 +46,9 @@ public abstract class BaseEntity implements Serializable {
     }
 
     public String getId() {
-        return this.id.toHexString();
+    	if(this.id != null)
+    		return this.id.toHexString();
+    	return "";
     }
     
     public void setId(String id) {

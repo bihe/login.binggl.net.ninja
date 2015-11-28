@@ -8,36 +8,41 @@ import net.binggl.login.core.entity.User;
 import net.binggl.login.core.repository.UserRepository;
 import net.binggl.ninja.mongodb.MongoDB;
 
-public class MongoDbUserRepository  implements UserRepository {
+public class MongoDbUserRepository extends AbstractMongoDbRepository<User> implements UserRepository {
 
-    private MongoDB mongo;
+	/**
+	 * constructor with dpendency injection
+	 * 
+	 * @param mongodb
+	 *            the mongo backend object
+	 */
+	@Inject
+	public MongoDbUserRepository(MongoDB mongodb) {
+		super(mongodb);
+	}
 
-    /**
-     * constructor with dpendency injection
-     * @param mongodb the mongo backend object
-     */
-    @Inject
-    public MongoDbUserRepository(MongoDB mongodb) {
-        this.mongo = mongodb;
-    }
+	@Override
+	public User getUserByName(String username) {
+		Datastore ds = this.mongo.getDatastore();
+		User user = ds.createQuery(User.class).field("userName").equal(username).get();
+		return user;
+	}
 
-    @Override
-    public User getUserByName(String username) {
-        Datastore ds = this.mongo.getDatastore();
-        User user = ds.createQuery(User.class).field("userName").equal(username).get();
-        return user;
-    }
+	@Override
+	public User getUserByEmail(String email) {
+		Datastore ds = this.mongo.getDatastore();
+		User user = ds.createQuery(User.class).field("email").equal(email).get();
+		return user;
+	}
 
-    @Override
-    public User getUserByEmail(String email) {
-        Datastore ds = this.mongo.getDatastore();
-        User user = ds.createQuery(User.class).field("email").equal(email).get();
-        return user;
-    }
-
-    @Override
-    public void save(User user) {
-        Datastore ds = this.mongo.getDatastore();
-        ds.save(user);
-    }
+	@Override
+	public User save(User user) {
+		User u = this.save(user, User.class, (User target, User source) -> {
+			target.setDisplayName(source.getDisplayName());
+			target.setEmail(source.getEmail());
+			target.setUserName(source.getUserName());
+			target.setSites(source.getSites());
+		});
+		return u;
+	}
 }

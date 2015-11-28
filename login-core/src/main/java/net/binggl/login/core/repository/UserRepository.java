@@ -3,7 +3,7 @@ package net.binggl.login.core.repository;
 import net.binggl.login.core.entity.User;
 
 public interface UserRepository {
-
+	
     /**
      * get the user defined by the userId
      * @param username the specific username
@@ -20,8 +20,9 @@ public interface UserRepository {
 
     /**
      * save the user
-     * @param user the user user object
+     * @param user the user object
+     * @return the user object
      */
-    void save(User user);
+    User save(User user);
 
 }
