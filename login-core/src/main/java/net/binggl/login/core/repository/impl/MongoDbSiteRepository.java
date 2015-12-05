@@ -37,7 +37,7 @@ public class MongoDbSiteRepository extends AbstractMongoDbRepository<Site> imple
 	
 	@Override
     public Site save(Site site) {
-		Site s = this.save(site, Site.class, (Site target, Site source) -> {
+		Site s = this.save(site, Site.class, (Site source, Site target) -> {
 			target.setName(source.getName());
 			target.setUrl(source.getUrl());
 			target.setPermissions(source.getPermissions());

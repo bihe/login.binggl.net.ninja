@@ -18,7 +18,7 @@ import net.binggl.ninja.mongodb.MongoDB;
  */
 @FunctionalInterface
 interface EntityHandler<T> {
-	void set(T target, T source);
+	void set(T source, T target);
 }
 
 
@@ -52,7 +52,7 @@ public abstract class AbstractMongoDbRepository<T extends BaseEntity> {
     			foundEntry.setModified(new Date());
         		// use a lambda expression to overwrite the values
         		// of the found object
-    			handler.set(foundEntry, object);
+    			handler.set(object, foundEntry);
     			
     			ds.save(foundEntry);
     			entry = foundEntry;

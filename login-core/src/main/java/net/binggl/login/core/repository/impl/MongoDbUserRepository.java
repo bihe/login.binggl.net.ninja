@@ -37,7 +37,7 @@ public class MongoDbUserRepository extends AbstractMongoDbRepository<User> imple
 
 	@Override
 	public User save(User user) {
-		User u = this.save(user, User.class, (User target, User source) -> {
+		User u = this.save(user, User.class, (User source, User target) -> {
 			target.setDisplayName(source.getDisplayName());
 			target.setEmail(source.getEmail());
 			target.setUserName(source.getUserName());
