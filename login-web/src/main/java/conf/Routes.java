@@ -29,7 +29,7 @@ public class Routes implements ApplicationRoutes {
     public void init(Router router) {  
         
     	// authentication routes
-        router.GET().route("/login").with(NinjaOauthController.class, "startauth");
+        router.GET().route("/startauth").with(NinjaOauthController.class, "startauth");
         router.GET().route("/oauth2callback").with(NinjaOauthController.class, "oauth2callback");
     	
         

@@ -16,9 +16,9 @@ import net.binggl.ninja.oauth.OauthAuthorizationService;
 import ninja.Context;
 import ninja.utils.NinjaProperties;
 
-public class OauthMongoDbAuthorizationService implements OauthAuthorizationService {
+public class OauthTokenAuthorizationService implements OauthAuthorizationService {
 
-	private static final Logger logger = LoggerFactory.getLogger(OauthMongoDbAuthorizationService.class);
+	private static final Logger logger = LoggerFactory.getLogger(OauthTokenAuthorizationService.class);
 
 	@Inject
 	private UserService userService;

@@ -21,7 +21,7 @@ import com.google.inject.Singleton;
 import net.binggl.login.core.CoreModule;
 import net.binggl.ninja.oauth.NinjaOauthModule;
 import net.binggl.ninja.oauth.OauthAuthorizationService;
-import service.OauthMongoDbAuthorizationService;
+import service.OauthTokenAuthorizationService;
 
 @Singleton
 public class Module extends AbstractModule {
@@ -35,6 +35,7 @@ public class Module extends AbstractModule {
         // startup
         bind(CustomObjectMapper.class);
 
-        bind(OauthAuthorizationService.class).to(OauthMongoDbAuthorizationService.class);
+        // bind a specific authorization implementation
+        bind(OauthAuthorizationService.class).to(OauthTokenAuthorizationService.class);
     }
 }

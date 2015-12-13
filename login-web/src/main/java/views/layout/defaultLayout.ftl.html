@@ -1,4 +1,4 @@
-<#macro master title="${i18n('loginApplicationTitle')}">
+<#macro master title="${i18n('loginApplicationTitle')}" style="">
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -10,8 +10,9 @@
     <meta name="author" content="Henrik Binggl">
     <title>${title}</title>
 
-    <!-- Bootstrap -->
-    <link href="assets/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="${basepath}assets/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="${basepath}assets/static/css/font-awesome.min.css" rel="stylesheet">
+    <#noescape>${style}</#noescape>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -27,7 +28,7 @@
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="assets/static/js/bootstrap.min.js"></script>
+    <script src="${basepath}assets/static/js/bootstrap.min.js"></script>
   </body>
 </html>
 

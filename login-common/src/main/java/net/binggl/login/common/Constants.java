@@ -12,6 +12,11 @@ public class Constants {
 	public final static String AUTH_TOKEN_SECRET = "auth.token.secret";
 	
 	/**
+	 * the base path of the application
+	 */
+	public static final String CONFIG_BASE_PATH = "application.basepath";
+	
+	/**
 	 * token cookie
 	 */
 	public final static String TOKEN_COOKIE_NAME = "application.cookie.token.name";

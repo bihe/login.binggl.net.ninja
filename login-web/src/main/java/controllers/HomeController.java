@@ -21,16 +21,13 @@ import ninja.Results;
 public class HomeController extends AbstractController {
 
     private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
-    
+   
     public Result index(Context context, @AuthenticatedUser User user) {
-
         if(user == null) {
-        	
             logger.debug("No authenticated user available show login screen!");
             return this.processTemplateResult(Results.html());
         }
-
-        return Results.redirect("dashboard/");
+        return Results.redirect(this.getBasePath() + "/assets/app");
     } 
     
     public Result login() {

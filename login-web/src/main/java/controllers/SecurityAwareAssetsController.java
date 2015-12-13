@@ -1,20 +1,5 @@
 package controllers;
 
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Optional;
-import com.google.common.io.ByteStreams;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-import ninja.*;
-import ninja.utils.HttpCacheToolkit;
-import ninja.utils.MimeTypes;
-import ninja.utils.NinjaProperties;
-import ninja.utils.ResponseStreams;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,6 +7,30 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Optional;
+import com.google.common.io.ByteStreams;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+
+import filters.SecurityFilter;
+import ninja.AssetsController;
+import ninja.AssetsControllerHelper;
+import ninja.Context;
+import ninja.FilterWith;
+import ninja.Renderable;
+import ninja.Result;
+import ninja.Results;
+import ninja.utils.HttpCacheToolkit;
+import ninja.utils.MimeTypes;
+import ninja.utils.NinjaProperties;
+import ninja.utils.ResponseStreams;
 
 /**
  * Subclass the AssetsController. Add a security logic to the asset controller
@@ -33,7 +42,7 @@ import java.net.URLConnection;
  * 
  * @author henrik
  */
-// TODO: @FilterWith(SecurityFilter.class)
+@FilterWith(SecurityFilter.class)
 @Singleton
 public class SecurityAwareAssetsController extends AssetsController {
 
