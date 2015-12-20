@@ -29,6 +29,12 @@ public class MongoDbUserRepository extends AbstractMongoDbRepository<User> imple
 	}
 
 	@Override
+	public User getUserById(String id) {
+		User user = this.mongo.findById(id, User.class);
+		return user;
+	}
+	
+	@Override
 	public User getUserByEmail(String email) {
 		Datastore ds = this.mongo.getDatastore();
 		User user = ds.createQuery(User.class).field("email").equal(email).get();

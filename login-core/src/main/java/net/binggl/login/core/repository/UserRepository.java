@@ -10,6 +10,13 @@ public interface UserRepository {
      * @return user object
      */
     User getUserByName(String username);
+    
+    /**
+     * retrieve the user by the given id
+     * @param id user identfier
+     * @return user object
+     */
+    User getUserById(String id);
 
     /**
      * get the user identified by the email

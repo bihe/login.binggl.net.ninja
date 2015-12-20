@@ -16,12 +16,12 @@
 
 package conf;
 
+import controllers.DashboardController;
 import controllers.HomeController;
-import controllers.SecurityAwareAssetsController;
+import net.binggl.ninja.oauth.NinjaOauthController;
+import ninja.AssetsController;
 import ninja.Router;
 import ninja.application.ApplicationRoutes;
-
-import net.binggl.ninja.oauth.NinjaOauthController;
 
 public class Routes implements ApplicationRoutes {
 
@@ -31,13 +31,13 @@ public class Routes implements ApplicationRoutes {
     	// authentication routes
         router.GET().route("/startauth").with(NinjaOauthController.class, "startauth");
         router.GET().route("/oauth2callback").with(NinjaOauthController.class, "oauth2callback");
-    	
+    	router.GET().route("/login").with(HomeController.class, "login");
         
-        router.GET().route("/login").with(HomeController.class, "login");
-        
-        
+        // dashboard routes
+        router.GET().route("/dashboard/user").with(DashboardController.class, "list");
+                        
         // static content
-        router.GET().route("/assets/{fileName: .*}").with(SecurityAwareAssetsController.class, "serveStatic");
+        router.GET().route("/assets/{fileName: .*}").with(AssetsController.class, "serveStatic");
         
         ///////////////////////////////////////////////////////////////////////
         // Index / Catchall shows index page

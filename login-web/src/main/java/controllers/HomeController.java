@@ -27,7 +27,7 @@ public class HomeController extends AbstractController {
             logger.debug("No authenticated user available show login screen!");
             return this.processTemplateResult(Results.html());
         }
-        return Results.redirect(this.getBasePath() + "/assets/app");
+        return Results.redirect(this.getBaseUrl(context) + this.getBasePath() + "assets/app");
     } 
     
     public Result login() {

@@ -66,6 +66,7 @@ gulp.task('images', () => {
     .pipe(gulp.dest('dist/images'));
 });
 
+// https://github.com/ck86/main-bower-files
 gulp.task('fonts', () => {
   return gulp.src(require('main-bower-files')({
     filter: '**/*.{eot,svg,ttf,woff,woff2}'
@@ -88,7 +89,7 @@ gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 gulp.task('serve', ['styles', 'fonts'], () => {
 
   var proxyOptions = url.parse('http://localhost:8080/');
-  proxyOptions.route = '/api';
+  proxyOptions.route = '/dashboard';
 	
   browserSync({
     notify: false,
@@ -101,7 +102,7 @@ gulp.task('serve', ['styles', 'fonts'], () => {
       }
     }
   });
-
+  
   gulp.watch([
     'app/*.html',
     'app/scripts/**/*.js',

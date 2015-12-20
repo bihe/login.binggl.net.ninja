@@ -10,13 +10,15 @@ public class User {
 
     private String email;
     private String displayName;
+    private String userName;
     private String id;
     private List<String> sitePermissions;
 
-    public User(String email, String displayName, String id) {
+    public User(String email, String displayName, String id, String userName) {
         this.email = email;
         this.displayName = displayName;
         this.id = id;
+        this.userName = userName;
     }
 
     public String getEmail() {
@@ -50,35 +52,67 @@ public class User {
 	public void setSitePermissions(List<String> sitePermissions) {
 		this.sitePermissions = sitePermissions;
 	}
+	
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	
+
+    @Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((displayName == null) ? 0 : displayName.hashCode());
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((userName == null) ? 0 : userName.hashCode());
+		return result;
+	}
 
 	@Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		if (displayName == null) {
+			if (other.displayName != null)
+				return false;
+		} else if (!displayName.equals(other.displayName))
+			return false;
+		if (email == null) {
+			if (other.email != null)
+				return false;
+		} else if (!email.equals(other.email))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (userName == null) {
+			if (other.userName != null)
+				return false;
+		} else if (!userName.equals(other.userName))
+			return false;
+		return true;
+	}
 
-        User user = (User) o;
-
-        if (getEmail() != null ? !getEmail().equals(user.getEmail()) : user.getEmail() != null) return false;
-        if (getDisplayName() != null ? !getDisplayName().equals(user.getDisplayName()) : user.getDisplayName() != null)
-            return false;
-        return !(getId() != null ? !getId().equals(user.getId()) : user.getId() != null);
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = getEmail() != null ? getEmail().hashCode() : 0;
-        result = 31 * result + (getDisplayName() != null ? getDisplayName().hashCode() : 0);
-        result = 31 * result + (getId() != null ? getId().hashCode() : 0);
-        return result;
-    }
-
-    @Override
+	@Override
     public String toString() {
         return "User{" +
                 "id='" + id + '\'' +
                 ", displayName='" + displayName + '\'' +
                 ", email='" + email + '\'' +
+                ", userName='" + userName + '\'' +
                 '}';
     }
 }

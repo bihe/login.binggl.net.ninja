@@ -24,6 +24,7 @@ import ninja.utils.NinjaProperties;
 public class JwtTokenService implements TokenService {
 
 	private static final String USER_ID = "UserId";
+	private static final String USERNAME = "UserName";
 	private static final String DISPLAYNAME = "DisplayName";
 	private static final String EMAIL = "Email";
 	private static final String CLAIMS = "Claims";
@@ -92,6 +93,7 @@ public class JwtTokenService implements TokenService {
 	private Map<String, Object> getUserMap(User user) {
 		Map<String, Object> payload = new HashMap<String, Object>();
 		payload.put(USER_ID, user.getId());
+		payload.put(USERNAME, user.getUserName());
 		payload.put(DISPLAYNAME, user.getDisplayName());
 		payload.put(EMAIL, user.getEmail());
 		payload.put(CLAIMS, user.getSitePermissions());
@@ -102,7 +104,8 @@ public class JwtTokenService implements TokenService {
 	private User getUserObject(Map<String, Object> payload) {
 		User user = new User((String) payload.get(EMAIL), 
 				(String) payload.get(DISPLAYNAME),
-				(String) payload.get(USER_ID)
+				(String) payload.get(USER_ID),
+				(String) payload.get(USERNAME)
 				);
 		user.setSitePermissions((List<String>) payload.get(CLAIMS));
 		return user;

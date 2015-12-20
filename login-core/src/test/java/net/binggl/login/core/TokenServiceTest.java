@@ -54,7 +54,7 @@ public class TokenServiceTest {
 		String token = tokenService.getToken(null, null);
 		assertNull(token);
 		
-		User user = new User("a.b@c.de", "Name", "UserName");
+		User user = new User("a.b@c.de", "Name", "id", "UserName");
 		token = tokenService.getToken(user, "secret");
 		assertNotNull(token);
 		// roundtrip!

@@ -22,9 +22,9 @@ public class UserServiceImpl implements UserService {
 			
 			// TODO: format the site-permissions in a manageable way
 			
-			
 			User user = new User(entityUser.getEmail(),
 					entityUser.getDisplayName(),
+					entityUser.getId(),
 					entityUser.getUserName());
 			return user;
 		}
