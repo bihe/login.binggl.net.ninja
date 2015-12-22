@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Singleton;
 
 import extractors.AuthenticatedUser;
-import net.binggl.login.common.models.User;
+import net.binggl.login.core.models.User;
 import ninja.Context;
 import ninja.Result;
 import ninja.Results;

@@ -7,7 +7,7 @@ import com.google.inject.Singleton;
 
 import extractors.AuthenticatedUser;
 import filters.SecurityFilter;
-import net.binggl.login.common.models.User;
+import net.binggl.login.core.models.User;
 import ninja.Context;
 import ninja.FilterWith;
 import ninja.Result;

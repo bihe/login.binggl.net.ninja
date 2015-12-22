@@ -29,7 +29,6 @@
 	</developers>
 
     <modules>
-        <module>login-common</module>
 		<module>login-core</module>
         <module>login-web</module>
     </modules>

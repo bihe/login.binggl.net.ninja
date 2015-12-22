@@ -1,4 +1,4 @@
-package net.binggl.login.common.models;
+package net.binggl.login.core.models;
 
 import java.util.List;
 

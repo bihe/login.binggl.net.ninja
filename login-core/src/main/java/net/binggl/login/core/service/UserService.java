@@ -1,6 +1,6 @@
 package net.binggl.login.core.service;
 
-import net.binggl.login.common.models.User;
+import net.binggl.login.core.models.User;
 
 public interface UserService {
 

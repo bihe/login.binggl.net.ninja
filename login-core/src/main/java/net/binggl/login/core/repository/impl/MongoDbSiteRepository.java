@@ -12,10 +12,6 @@ import net.binggl.ninja.mongodb.MongoDB;
 
 public class MongoDbSiteRepository extends AbstractMongoDbRepository<Site> implements SiteRepository {
 
-	/**
-     * constructor with dpendency injection
-     * @param mongodb the mongo backend object
-     */
     @Inject
     public MongoDbSiteRepository(MongoDB mongodb) {
     	super(mongodb);

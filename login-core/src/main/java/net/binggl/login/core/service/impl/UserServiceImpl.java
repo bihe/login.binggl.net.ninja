@@ -2,7 +2,7 @@ package net.binggl.login.core.service.impl;
 
 import com.google.inject.Inject;
 
-import net.binggl.login.common.models.User;
+import net.binggl.login.core.models.User;
 import net.binggl.login.core.repository.UserRepository;
 import net.binggl.login.core.service.UserService;
 

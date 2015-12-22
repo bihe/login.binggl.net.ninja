@@ -1,4 +1,4 @@
-package net.binggl.login.common;
+package net.binggl.login.core;
 
 /**
  * global constants, values, ...

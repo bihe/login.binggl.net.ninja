@@ -1,6 +1,6 @@
 package controllers;
 
-import static net.binggl.login.common.Constants.CONFIG_BASE_PATH;
+import static net.binggl.login.core.Constants.CONFIG_BASE_PATH;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,5 +1,6 @@
 package net.binggl.login.core;
 
+import static net.binggl.login.core.Constants.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -16,8 +17,7 @@ import static org.mockito.Mockito.*;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static net.binggl.login.common.Constants.*;
-import net.binggl.login.common.models.User;
+import net.binggl.login.core.models.User;
 import net.binggl.login.core.service.TokenService;
 import net.binggl.login.core.service.impl.JwtTokenService;
 import ninja.Context;

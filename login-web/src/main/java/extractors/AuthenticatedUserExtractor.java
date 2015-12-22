@@ -1,6 +1,6 @@
 package extractors;
 
-import static net.binggl.login.common.Constants.AUTH_TOKEN_SECRET;
+import static net.binggl.login.core.Constants.AUTH_TOKEN_SECRET;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
-import net.binggl.login.common.models.User;
+import net.binggl.login.core.models.User;
 import net.binggl.login.core.service.TokenService;
 import ninja.Context;
 import ninja.params.ArgumentExtractor;

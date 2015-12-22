@@ -1,11 +1,11 @@
 package net.binggl.login.core.service.impl;
 
-import static net.binggl.login.common.Constants.COOKIE_DOMAIN;
-import static net.binggl.login.common.Constants.COOKIE_HTTP_ONLY;
-import static net.binggl.login.common.Constants.COOKIE_MAXAGE;
-import static net.binggl.login.common.Constants.COOKIE_PATH;
-import static net.binggl.login.common.Constants.COOKIE_SECURE;
-import static net.binggl.login.common.Constants.TOKEN_COOKIE_NAME;
+import static net.binggl.login.core.Constants.COOKIE_DOMAIN;
+import static net.binggl.login.core.Constants.COOKIE_HTTP_ONLY;
+import static net.binggl.login.core.Constants.COOKIE_MAXAGE;
+import static net.binggl.login.core.Constants.COOKIE_PATH;
+import static net.binggl.login.core.Constants.COOKIE_SECURE;
+import static net.binggl.login.core.Constants.TOKEN_COOKIE_NAME;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +15,7 @@ import com.auth0.jwt.JWTSigner;
 import com.auth0.jwt.JWTVerifier;
 import com.google.inject.Inject;
 
-import net.binggl.login.common.models.User;
+import net.binggl.login.core.models.User;
 import net.binggl.login.core.service.TokenService;
 import ninja.Context;
 import ninja.Cookie;
