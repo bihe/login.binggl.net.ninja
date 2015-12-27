@@ -16,8 +16,10 @@
 package conf;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Scopes;
 import com.google.inject.Singleton;
 
+import conf.development.InitialData;
 import net.binggl.login.core.CoreModule;
 import net.binggl.ninja.oauth.NinjaOauthModule;
 import net.binggl.ninja.oauth.OauthAuthorizationService;
@@ -26,7 +28,7 @@ import service.OauthTokenAuthorizationService;
 @Singleton
 public class Module extends AbstractModule {
 
-    @Override
+	@Override
     protected void configure() {
 
         install(new NinjaOauthModule());
@@ -37,5 +39,7 @@ public class Module extends AbstractModule {
 
         // bind a specific authorization implementation
         bind(OauthAuthorizationService.class).to(OauthTokenAuthorizationService.class);
+        
+        bind(InitialData.class).in(Scopes.SINGLETON);
     }
 }

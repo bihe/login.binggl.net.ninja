@@ -19,11 +19,9 @@ import com.google.common.io.ByteStreams;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import filters.SecurityFilter;
 import ninja.AssetsController;
 import ninja.AssetsControllerHelper;
 import ninja.Context;
-import ninja.FilterWith;
 import ninja.Renderable;
 import ninja.Result;
 import ninja.Results;
@@ -33,8 +31,6 @@ import ninja.utils.NinjaProperties;
 import ninja.utils.ResponseStreams;
 
 /**
- * Subclass the AssetsController. Add a security logic to the asset controller
- * enable serving of assets from arbitrary file-system path in production! the
  * external filesystem handling was "back-ported" from ninjaframework the
  * feature was removed due to security considerations --> see:
  * https://github.com/ninjaframework/ninja/commit/
@@ -42,11 +38,10 @@ import ninja.utils.ResponseStreams;
  * 
  * @author henrik
  */
-@FilterWith(SecurityFilter.class)
 @Singleton
-public class SecurityAwareAssetsController extends AssetsController {
+public class ExternalAssetsController extends AssetsController {
 
-	private static final Logger logger = LoggerFactory.getLogger(SecurityAwareAssetsController.class);
+	private static final Logger logger = LoggerFactory.getLogger(ExternalAssetsController.class);
 	final String APPLICATION_STATIC_ASSET_BASEDIR = "application.static.asset.basedir";
 
 	private final MimeTypes mimeTypes;
@@ -56,7 +51,7 @@ public class SecurityAwareAssetsController extends AssetsController {
 	private final Optional<String> assetBaseDir;
 
 	@Inject
-	public SecurityAwareAssetsController(AssetsControllerHelper assetsControllerHelper,
+	public ExternalAssetsController(AssetsControllerHelper assetsControllerHelper,
 			HttpCacheToolkit httpCacheToolkit, MimeTypes mimeTypes, NinjaProperties ninjaProperties) {
 		super(assetsControllerHelper, httpCacheToolkit, mimeTypes, ninjaProperties);
 
@@ -160,10 +155,18 @@ public class SecurityAwareAssetsController extends AssetsController {
 				// via System.getPropery("user.dir").
 				// In that case we fall back to trying to load from classpath
 				&& new File(assetsDirInDevModeWithoutTrailingSlash()).exists()) {
-			String finalNameWithoutLeadingSlash = assetsControllerHelper.normalizePathWithoutLeadingSlash(fileName,
-					false);
-			File possibleFile = new File(
-					assetsDirInDevModeWithoutTrailingSlash() + File.separator + finalNameWithoutLeadingSlash);
+			
+			File possibleFile = null;
+			if (assetBaseDir.isPresent()) {
+				String finalNameWithoutLeadingSlash = getNormalizePathWithoutLeadingSlash(fileName);
+				possibleFile = new File(assetBaseDir.get() + File.separator + finalNameWithoutLeadingSlash);
+				url = getUrlForFile(possibleFile);
+			} else {
+				String finalNameWithoutLeadingSlash = assetsControllerHelper.normalizePathWithoutLeadingSlash(fileName,
+						false);
+				possibleFile = new File(
+						assetsDirInDevModeWithoutTrailingSlash() + File.separator + finalNameWithoutLeadingSlash);
+			}
 			url = getUrlForFile(possibleFile);
 		} else {
 			// https://github.com/ninjaframework/ninja/commit/81d29be2a16f0c261d12d2363db7144dd512634b

@@ -29,7 +29,7 @@ public class DashboardController extends AbstractController {
 		
 		if(lookupUser == null) {
 			logger.debug("Could not get the user by the given id {}", user.getId());
-			return Results.notFound();
+			return Results.notFound().text().render("User not found");
 		}
 		result = Results.json().render(lookupUser);
 		

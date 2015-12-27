@@ -17,9 +17,9 @@
 package conf;
 
 import controllers.DashboardController;
+import controllers.ExternalAssetsController;
 import controllers.HomeController;
 import net.binggl.ninja.oauth.NinjaOauthController;
-import ninja.AssetsController;
 import ninja.Router;
 import ninja.application.ApplicationRoutes;
 
@@ -37,7 +37,7 @@ public class Routes implements ApplicationRoutes {
         router.GET().route("/dashboard/user").with(DashboardController.class, "list");
                         
         // static content
-        router.GET().route("/assets/{fileName: .*}").with(AssetsController.class, "serveStatic");
+        router.GET().route("/assets/{fileName: .*}").with(ExternalAssetsController.class, "serveStatic");
         
         ///////////////////////////////////////////////////////////////////////
         // Index / Catchall shows index page

@@ -68,4 +68,14 @@ public abstract class BaseEntity implements Serializable {
         }
         this.modified = new Date();
     }
+    
+    
+    /**
+     * create a new id as a string
+     * @return object id as string
+     */
+    public static String newObjectId() {
+    	ObjectId id = new ObjectId();
+    	return id.toHexString();
+    }
 }
