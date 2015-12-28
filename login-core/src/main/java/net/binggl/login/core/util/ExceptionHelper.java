@@ -1,7 +1,6 @@
 package net.binggl.login.core.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import net.binggl.login.core.exceptions.LogRuntimeException;
 
 /**
  * @see https://gist.github.com/jfager/9317201
@@ -22,8 +21,6 @@ import org.slf4j.LoggerFactory;
  */
 public class ExceptionHelper {
     
-	private static final Logger logger = LoggerFactory.getLogger(ExceptionHelper.class);
-	
     public interface Block {
         void go() throws Exception;
     }
@@ -37,8 +34,7 @@ public class ExceptionHelper {
         try {
             t.go();
         } catch(Exception e) {
-        	logger.error("Got exception {}, stack: {}", e.getMessage(), e);
-            throw new RuntimeException(e);
+            throw new LogRuntimeException(e);
         }
     }
     
@@ -46,8 +42,7 @@ public class ExceptionHelper {
         try {
             return f.go();
         } catch(Exception e) {
-        	logger.error("Got exception {}, stack: {}", e.getMessage(), e);
-            throw new RuntimeException(e);
+            throw new LogRuntimeException(e);
         }
     }
 }

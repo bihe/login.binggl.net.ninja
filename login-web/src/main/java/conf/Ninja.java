@@ -49,7 +49,7 @@ public class Ninja extends NinjaDefault implements ninja.Ninja {
 			// additional safe-guard
 			// the process has to be in dev mode, check additional flag in application.conf
 			
-			if(MODE_DEVELOPMENT.equals(properties.getBoolean(APPLICATION_MODE))) {
+			if(MODE_DEVELOPMENT.equals(properties.get(APPLICATION_MODE))) {
 			
 				// init the db and the collections
 				this.initData.init(properties.get("ninja.mongodb.dbname"), "users", "sites");
