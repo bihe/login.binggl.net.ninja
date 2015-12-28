@@ -2,49 +2,60 @@ package net.binggl.login.core;
 
 /**
  * global constants, values, ...
+ * 
  * @author henrik
  */
 public class Constants {
 
-	/**
-	 * the secret used for token signing
-	 */
-	public final static String AUTH_TOKEN_SECRET = "auth.token.secret";
-	
 	/**
 	 * the base path of the application
 	 */
 	public static final String CONFIG_BASE_PATH = "application.basepath";
 	
 	/**
+	 * additional mode switch in the application.conf file
+	 * PROD and DEV
+	 */
+	public static final String APPLICATION_MODE = "application.mode";
+	
+	/**
+	 * the value indicating development mode
+	 */
+	public static final String MODE_DEVELOPMENT = "DEV";
+
+	/**
+	 * the secret used for token signing
+	 */
+	public final static String AUTH_TOKEN_SECRET = "auth.token.secret";
+
+	/**
 	 * token cookie
 	 */
-	public final static String TOKEN_COOKIE_NAME = "application.auth.cookie.token.name";
+	public final static String TOKEN_COOKIE_NAME = "auth.cookie.token.name";
 
 	/**
 	 * the domain of the cookie
 	 */
-	public final static String COOKIE_DOMAIN = "application.auth.cookie.domain";
-	
+	public final static String COOKIE_DOMAIN = "auth.cookie.domain";
+
 	/**
 	 * max time to life for cookie
 	 */
-	public final static String COOKIE_MAXAGE = "application.auth.cookie.maxAge";
-	
+	public final static String COOKIE_MAXAGE = "auth.cookie.maxAge";
+
 	/**
 	 * the cookie path
 	 */
-	public final static String COOKIE_PATH = "application.auth.cookie.path";
-	
+	public final static String COOKIE_PATH = "auth.cookie.path";
+
 	/**
 	 * secure cookie
 	 */
-	public final static String COOKIE_SECURE = "application.auth.cookie.secure";
-	
+	public final static String COOKIE_SECURE = "auth.cookie.secure";
+
 	/**
 	 * http only
 	 */
-	public final static String COOKIE_HTTP_ONLY = "application.auth.cookie.httponly";
-	
-	
+	public final static String COOKIE_HTTP_ONLY = "auth.cookie.httponly";
+
 }

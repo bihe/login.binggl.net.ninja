@@ -23,17 +23,13 @@ import ninja.utils.NinjaProperties;
  */
 public class AbstractController {
 
-	private final static String USER_CACHE = "cache.user";
-	
+	private static final String USER_CACHE = "cache.user";
 	private static final String BASE_PATH = "basepath";
 	private static final String YEAR = "year";
 
-	@Inject
-	private NinjaProperties properties;
-	@Inject
-	private UserRepository userRepo;
-	@Inject 
-	NinjaCache ninjaCache;
+	@Inject	private NinjaProperties properties;
+	@Inject	private UserRepository userRepo;
+	@Inject private NinjaCache ninjaCache;
 
 	private final Map<String, Object> getBaseRenderObjects() {
 		Map<String, Object> renderObjects = new HashMap<>();

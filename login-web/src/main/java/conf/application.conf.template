@@ -1,4 +1,6 @@
 application.name=binggl.net login application
+application.mode=PROD
+%dev.application.mode=DEV
 
 application.cookie.prefix=login
 application.cookie.domain=.binggl.net
@@ -12,10 +14,8 @@ application.secret = <APP_SESSION_SECRET>
 application.basepath = /
 application.static.asset.basedir = <BASE_DIR_TO_UI>
 
-
 #ISO Language Code, optionally followed by a valid ISO Country Code. 
 application.languages=en
-
 
 ## google oauth authentication
 ninja.oauth.google.key=<GOOGLE_KEY>
@@ -25,15 +25,15 @@ ninja.oauth.success.url=http://devel.binggl.net:8080/
 ninja.oauth.failure.url=http://devel.binggl.net:8080/login
 
 ## jwt aut cookie settings
-%dev.application.auth.cookie.token.name=login_token
-%dev.application.auth.cookie.domain=.binggl.net
-%dev.application.auth.cookie.maxAge=-1
-%dev.application.auth.cookie.path=/
-%dev.application.auth.cookie.secure=false
-%dev.application.auth.cookie.httponly=true
-
 ## authentication settings
+%dev.auth.cookie.token.name=login_token
+%dev.auth.cookie.domain=.binggl.net
+%dev.auth.cookie.maxAge=-1
+%dev.auth.cookie.path=/
+%dev.auth.cookie.secure=false
+%dev.auth.cookie.httponly=true
 auth.token.secret = <SECRET>
+
 
 ## db settings
 ninja.mongodb.host=localhost

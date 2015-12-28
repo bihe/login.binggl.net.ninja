@@ -1,6 +1,6 @@
 package conf.development;
 
-import static net.binggl.login.core.util.ExceptionHelper.wrap;
+import static net.binggl.login.core.util.ExceptionHelper.wrapEx;
 
 import de.flapdoodle.embed.mongo.MongodExecutable;
 import de.flapdoodle.embed.mongo.MongodProcess;
@@ -25,7 +25,7 @@ public class EmbeddedMongod {
 	
 	public void startup() {
 		
-		wrap(() -> {
+		wrapEx(() -> {
 			IMongodConfig mongodConfig = new MongodConfigBuilder()
 	    	        .version(Version.Main.PRODUCTION)
 	    	        .net(new Net(PORT, Network.localhostIsIPv6()))
@@ -37,7 +37,7 @@ public class EmbeddedMongod {
 	}
 	
 	public void shutdown() {
-		wrap(() -> {
+		wrapEx(() -> {
 			mongod.stop();
 	        mongodExe.stop();
 		});

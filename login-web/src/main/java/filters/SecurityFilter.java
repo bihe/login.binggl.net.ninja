@@ -58,9 +58,6 @@ public class SecurityFilter implements Filter {
 	        }
 	        logger.debug("Got a user from the token: {}", user);
 		    
-		} catch (Exception EX) {
-			logger.error("Error during security filter check: " + EX.getMessage(), EX);
-			return getErrorResult(EX);
 		} catch (Throwable e) {
 			logger.error("Error during security filter check: " + e.getMessage(), e);
 			return getErrorResult(e);

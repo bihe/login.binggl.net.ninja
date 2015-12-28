@@ -1,5 +1,8 @@
 package net.binggl.login.core.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @see https://gist.github.com/jfager/9317201
  * 
@@ -7,7 +10,7 @@ package net.binggl.login.core.util;
  * {@code
  * import static net.binggl.login.core.util.ExceptionHelper.wrap;
  * 
- * String foo = wrap(() -> {
+ * String foo = wrapEx(() -> {
  *     if(new Random().nextBoolean()) {
  *         throw new Exception("Look ma, no try/catch!");
  *     } else {
@@ -19,6 +22,8 @@ package net.binggl.login.core.util;
  */
 public class ExceptionHelper {
     
+	private static final Logger logger = LoggerFactory.getLogger(ExceptionHelper.class);
+	
     public interface Block {
         void go() throws Exception;
     }
@@ -28,10 +33,11 @@ public class ExceptionHelper {
     }
     
     //And because these overload it only looks like I'm importing one name.
-    public static void wrap(Block t) {
+    public static void wrapEx(Block t) {
         try {
             t.go();
         } catch(Exception e) {
+        	logger.error("Got exception {}, stack: {}", e.getMessage(), e);
             throw new RuntimeException(e);
         }
     }
@@ -40,6 +46,7 @@ public class ExceptionHelper {
         try {
             return f.go();
         } catch(Exception e) {
+        	logger.error("Got exception {}, stack: {}", e.getMessage(), e);
             throw new RuntimeException(e);
         }
     }
