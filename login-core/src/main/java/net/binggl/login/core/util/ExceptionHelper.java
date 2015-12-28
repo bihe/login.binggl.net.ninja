@@ -42,7 +42,7 @@ public class ExceptionHelper {
         }
     }
     
-    public static <T> T wrap(NoArgFn<T> f) {
+    public static <T> T wrapEx(NoArgFn<T> f) {
         try {
             return f.go();
         } catch(Exception e) {
