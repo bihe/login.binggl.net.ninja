@@ -1,5 +1,6 @@
 package extractors;
 
+import static net.binggl.login.core.util.ExceptionHelper.logEx;
 import static net.binggl.login.core.Constants.AUTH_TOKEN_SECRET;
 
 import org.apache.commons.lang3.StringUtils;
@@ -34,7 +35,8 @@ public class AuthenticatedUserExtractor implements ArgumentExtractor<User> {
 	
 	@Override
     public User extract(Context context) {
-		try {
+		
+		return logEx(() -> {
 			String token = tokenService.getTokenFromCookie(context);
 			if(StringUtils.isEmpty(token))
 				return  null;
@@ -42,10 +44,7 @@ public class AuthenticatedUserExtractor implements ArgumentExtractor<User> {
 	        User user = tokenService.verifyToken(token, this.getTokenSecret());
 	        logger.debug("Got a user from the token: {}", user);
 		    return user;
-		} catch(Exception EX) {
-			logger.error("Could not extract user from context: " + EX.getMessage(), EX);
-		}
-		return null;
+		});
     }
 
     @Override

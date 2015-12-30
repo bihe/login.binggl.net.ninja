@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,12 +56,19 @@ public class TokenServiceTest {
 		assertNull(token);
 		
 		User user = new User("a.b@c.de", "Name", "id", "UserName");
+		List<String> permissions = new ArrayList<String>();
+		permissions.add("site1|permission1");
+		permissions.add("site2|permission1;permission3");
+		user.setSitePermissions(permissions);;
 		token = tokenService.getToken(user, "secret");
 		assertNotNull(token);
 		// roundtrip!
 		User verify = tokenService.verifyToken(token, "secret");
 		assertNotNull(verify);
 		assertEquals(user, verify);
+		assertEquals(2, user.getSitePermissions().size());
+		assertEquals("site1|permission1", user.getSitePermissions().get(0));
+		assertEquals("site2|permission1;permission3", user.getSitePermissions().get(1));
 		
 	}
 	
