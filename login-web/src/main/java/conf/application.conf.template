@@ -1,9 +1,10 @@
 application.name=binggl.net login application
-application.mode=PROD
 %dev.application.mode=DEV
+application.mode=PROD
 
 application.cookie.prefix=login
 application.cookie.domain=.binggl.net
+application.cookie.encryption=true
 
 application.session.expire_time_in_seconds=3600
 application.session.send_only_if_changed=true
