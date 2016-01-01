@@ -1,11 +1,15 @@
 package net.binggl.login.core.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
+import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Property;
 
-public class UserSite {
+@Embedded
+public class UserSite implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 	@Property("Name")
 	private String name;
 	@Property("Url")

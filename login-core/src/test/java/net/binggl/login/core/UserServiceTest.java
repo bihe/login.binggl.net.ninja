@@ -1,6 +1,9 @@
 package net.binggl.login.core;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -16,8 +19,9 @@ import org.mockito.runners.MockitoJUnitRunner;
 import net.binggl.login.core.entity.User;
 import net.binggl.login.core.entity.UserSite;
 import net.binggl.login.core.repository.UserRepository;
+import net.binggl.login.core.service.CacheService;
 import net.binggl.login.core.service.UserService;
-import net.binggl.login.core.service.impl.UserServiceImpl;
+import net.binggl.login.core.service.impl.CacheAwareUserService;
 import ninja.Context;
 import ninja.util.TestingNinjaContext;
 
@@ -26,6 +30,9 @@ public class UserServiceTest {
 	
 	@Mock
 	UserRepository userRepo;
+	@Mock
+	CacheService cacheService;
+	
 	
 	Context context = new TestingNinjaContext();
 	UserService userService;
@@ -38,7 +45,15 @@ public class UserServiceTest {
 		
 		when(userRepo.getUserByEmail(EMAIL)).thenReturn(getUserTestData());
 		
-		userService = new UserServiceImpl(userRepo);
+		// do not test the caching-service !!
+		doAnswer(invocation -> {
+			return null;
+		}).when(cacheService).put(EMAIL, getUserTestData());
+		doAnswer(invocation -> {
+			return null;
+		}).when(cacheService).get(EMAIL, net.binggl.login.core.models.User.class);
+		
+		userService = new CacheAwareUserService(userRepo, cacheService);
 	}
 	
 	/**

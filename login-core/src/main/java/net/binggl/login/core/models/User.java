@@ -1,14 +1,16 @@
 package net.binggl.login.core.models;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * define a user
  * @author henrik
  */
-public class User {
+public class User implements Serializable{
 
-    private String email;
+	private static final long serialVersionUID = 1L;
+	private String email;
     private String displayName;
     private String userName;
     private String id;

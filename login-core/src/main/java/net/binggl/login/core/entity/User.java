@@ -2,6 +2,7 @@ package net.binggl.login.core.entity;
 
 import java.util.List;
 
+import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Property;
 
@@ -15,7 +16,7 @@ public class User extends BaseEntity {
 	private String email;
 	@Property("DisplayName")
 	private String displayName;
-	@Property("Sites")
+	@Embedded("Sites")
 	private List<UserSite> sites;
 	
 
