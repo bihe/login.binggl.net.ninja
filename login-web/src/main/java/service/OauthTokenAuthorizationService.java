@@ -1,6 +1,7 @@
 package service;
 
 import static net.binggl.login.core.Constants.AUTH_TOKEN_SECRET;
+import static net.binggl.login.core.Constants.SESSION_USER_ID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.pac4j.oauth.profile.google2.Google2Profile;
@@ -40,6 +41,7 @@ public class OauthTokenAuthorizationService implements OauthAuthorizationService
 
 				if (StringUtils.isNotEmpty(token)) {
 					tokenService.setCookie(context, token);
+					context.getSession().put(SESSION_USER_ID, user.getId());
 					return true;
 				}
 				logger.warn("Could not create a token for user {}", user);

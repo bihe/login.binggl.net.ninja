@@ -13,6 +13,11 @@ public class Constants {
 	public static final String CONFIG_BASE_PATH = "application.basepath";
 	
 	/**
+	 * the key used to store the user in the session
+	 */
+	public static final String SESSION_USER_ID = "session.user.id";
+	
+	/**
 	 * additional mode switch in the application.conf file
 	 * PROD and DEV
 	 */

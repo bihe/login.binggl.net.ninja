@@ -9,11 +9,8 @@ import org.joda.time.DateTime;
 
 import com.google.inject.Inject;
 
-import net.binggl.login.core.entity.User;
-import net.binggl.login.core.repository.UserRepository;
 import ninja.Context;
 import ninja.Result;
-import ninja.cache.NinjaCache;
 import ninja.utils.NinjaProperties;
 
 /**
@@ -21,16 +18,14 @@ import ninja.utils.NinjaProperties;
  * 
  * @author henrik
  */
-public class AbstractController {
+public abstract class AbstractController {
 
-	private static final String USER_CACHE = "cache.user";
 	private static final String BASE_PATH = "basepath";
 	private static final String YEAR = "year";
 
 	@Inject	private NinjaProperties properties;
-	@Inject	private UserRepository userRepo;
-	@Inject private NinjaCache ninjaCache;
-
+	
+	
 	private final Map<String, Object> getBaseRenderObjects() {
 		Map<String, Object> renderObjects = new HashMap<>();
 		renderObjects.put(BASE_PATH, this.getBasePath());
@@ -47,18 +42,6 @@ public class AbstractController {
 		Result r = result;
 		r.render(this.getBaseRenderObjects());
 		return result;
-	}
-	
-	protected User getUserById(String id) {
-		User user = null;
-		user = ninjaCache.get(USER_CACHE + "_" + id, User.class);
-		if(user == null) {
-			user = userRepo.getUserById(id);
-			if(user != null) {
-				ninjaCache.add(USER_CACHE + "_" + id, user);
-			}
-		}
-		return user;
 	}
 	
 	protected String getBaseUrl(Context context) {

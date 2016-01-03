@@ -1,6 +1,7 @@
 package net.binggl.login.core.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,61 +11,44 @@ import java.util.List;
 public class User implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-	private String email;
-    private String displayName;
-    private String userName;
-    private String id;
-    private List<String> sitePermissions;
+	
+	private final String id;
+	private final String email;
+    private final String displayName;
+    private final String userName;
+    private final List<Site> sites;
 
-    public User(String email, String displayName, String id, String userName) {
+    private User(final String id, final String email, final String displayName, final String userName, final List<Site> sites) {
         this.email = email;
         this.displayName = displayName;
         this.id = id;
         this.userName = userName;
+        this.sites = sites;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getDisplayName() {
         return displayName;
-    }
-
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
     }
 
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-    
-    public List<String> getSitePermissions() {
-		return sitePermissions;
+    public List<Site>  getSitePermissions() {
+		return sites;
 	}
 
-	public void setSitePermissions(List<String> sitePermissions) {
-		this.sitePermissions = sitePermissions;
-	}
-	
 	public String getUserName() {
 		return userName;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
 
 	
-
+	
     @Override
 	public int hashCode() {
 		final int prime = 31;
@@ -117,4 +101,50 @@ public class User implements Serializable{
                 ", userName='" + userName + '\'' +
                 '}';
     }
+	
+	
+	public static class UserBuilder {
+		
+		private String id;
+		private String email;
+	    private String displayName;
+	    private String userName;
+	    private List<Site> sites;
+		
+		public UserBuilder() {
+			this.sites = new ArrayList<>();
+		}
+		
+		public UserBuilder id(final String id) {
+			this.id = id;
+			return this;
+		}
+		
+		public UserBuilder email(final String email) {
+			this.email = email;
+			return this;
+		}
+		
+		public UserBuilder displayName(final String displayName) {
+			this.displayName = displayName;
+			return this;
+		}
+		
+		public UserBuilder userName(final String userName) {
+			this.userName = userName;
+			return this;
+		}
+		
+		public UserBuilder sites(final List<Site> siteList) {
+			if(siteList != null)
+				this.sites = siteList;
+			return this;
+		}
+		
+		public User build() {
+			return new User(id, email, displayName,userName, sites);
+		}
+		
+	}
+	
 }

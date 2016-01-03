@@ -1,26 +1,33 @@
 package net.binggl.login.core;
 
-import static net.binggl.login.core.Constants.*;
+import static net.binggl.login.core.Constants.COOKIE_DOMAIN;
+import static net.binggl.login.core.Constants.COOKIE_HTTP_ONLY;
+import static net.binggl.login.core.Constants.COOKIE_MAXAGE;
+import static net.binggl.login.core.Constants.COOKIE_PATH;
+import static net.binggl.login.core.Constants.COOKIE_SECURE;
+import static net.binggl.login.core.Constants.TOKEN_COOKIE_NAME;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import static org.mockito.Mockito.*;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import net.binggl.login.core.models.Site;
+import net.binggl.login.core.models.Site.SiteBuilder;
 import net.binggl.login.core.models.User;
+import net.binggl.login.core.models.User.UserBuilder;
 import net.binggl.login.core.service.TokenService;
-import net.binggl.login.core.service.impl.JwtTokenService;
+import net.binggl.login.core.service.impl.NinjaJwtTokenService;
 import ninja.Context;
 import ninja.Cookie;
 import ninja.util.TestingNinjaContext;
@@ -44,7 +51,7 @@ public class TokenServiceTest {
 		when(properties.getBoolean(COOKIE_SECURE)).thenReturn(false);
 		when(properties.getBoolean(COOKIE_HTTP_ONLY)).thenReturn(true);
 		
-		tokenService = new JwtTokenService(properties);
+		tokenService = new NinjaJwtTokenService(properties);
 	}
 	
 	/**
@@ -55,21 +62,12 @@ public class TokenServiceTest {
 		String token = tokenService.getToken(null, null);
 		assertNull(token);
 		
-		User user = new User("a.b@c.de", "Name", "id", "UserName");
-		List<String> permissions = new ArrayList<String>();
-		permissions.add("site1|permission1");
-		permissions.add("site2|permission1;permission3");
-		user.setSitePermissions(permissions);;
+		User user = this.getUserTestData();
 		token = tokenService.getToken(user, "secret");
 		assertNotNull(token);
-		// roundtrip!
-		User verify = tokenService.verifyToken(token, "secret");
-		assertNotNull(verify);
-		assertEquals(user, verify);
-		assertEquals(2, user.getSitePermissions().size());
-		assertEquals("site1|permission1", user.getSitePermissions().get(0));
-		assertEquals("site2|permission1;permission3", user.getSitePermissions().get(1));
 		
+		boolean verify = tokenService.verifyToken(token, "secret");
+		assertTrue(verify);
 	}
 	
 	/**
@@ -91,6 +89,36 @@ public class TokenServiceTest {
 		String retrievedToken = tokenService.getTokenFromCookie(context);
 		assertNotNull(retrievedToken);
 		assertEquals(token, retrievedToken);
+		
+		tokenService.unsetCookie(context);
+		cookies = context.getCookies();
+		assertNotNull(cookies);
+		assertTrue(cookies.size() == 0);
+	}
+	
+	
+	private User getUserTestData() {
+		
+		Site site1 = new SiteBuilder()
+				.name("site1")
+				.url("http://www.site1.com")
+				.permissions(Arrays.asList("permission1", "permission2"))
+				.build();
+		
+		Site site2 = new SiteBuilder()
+				.name("site2")
+				.url("http://www.site2.com")
+				.permissions(Arrays.asList("permission3"))
+				.build();
+		
+		return new UserBuilder()
+			.id("ABC")
+			.displayName("DisplayName")
+			.userName("userName")
+			.email("a.b@c.de")
+			.sites(Arrays.asList(site1, site2))
+			.build();
+		
 	}
 
 }

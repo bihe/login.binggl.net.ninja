@@ -9,7 +9,10 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 
 import net.binggl.login.core.entity.UserSite;
+import net.binggl.login.core.models.Site;
+import net.binggl.login.core.models.Site.SiteBuilder;
 import net.binggl.login.core.models.User;
+import net.binggl.login.core.models.User.UserBuilder;
 import net.binggl.login.core.repository.UserRepository;
 import net.binggl.login.core.service.CacheService;
 import net.binggl.login.core.service.UserService;
@@ -29,11 +32,24 @@ public class CacheAwareUserService implements UserService {
 		this.cacheService = cache;
 	}
 	
-	/**
-	 * find the user by the given email
-	 * @param email
-	 * @return user object
-	 */
+	@Override
+	public User findeUserByAlternativId(String alternativeId) {
+		User user = this.cacheService.get(PREFIX + alternativeId, User.class);
+		if(user == null) {
+			logger.debug("Cache miss, use repository to query user!");
+			
+			net.binggl.login.core.entity.User entityUser = userRepo.getUserByAlternativeId(alternativeId);
+			if(entityUser != null) {
+				user = fromEntityUser(entityUser);
+				this.cacheService.put(PREFIX + alternativeId, user);
+				return user;
+			}
+			
+		}
+		return user;
+	}
+	
+	@Override
 	public User findUserByEmail(String email) {
 		logger.debug("Find a user by the given email {}", email);
 		
@@ -43,23 +59,8 @@ public class CacheAwareUserService implements UserService {
 		
 			net.binggl.login.core.entity.User entityUser = userRepo.getUserByEmail(email);
 			if(entityUser != null) {
-				
-				// format the sites and site-permissions in a "String-way"
-				List<String> permissions = new ArrayList<>();
-				if(entityUser.getSites() != null) {
-					for(UserSite site : entityUser.getSites()) {
-						permissions.add(this.formatSitePermissions(site));
-					}
-				}
-				
-				user = new User(entityUser.getEmail(),
-						entityUser.getDisplayName(),
-						entityUser.getId(),
-						entityUser.getUserName());
-				user.setSitePermissions(permissions);
-				
+				user = fromEntityUser(entityUser);
 				this.cacheService.put(PREFIX + email, user);
-				
 				return user;
 			}
 		}
@@ -68,23 +69,30 @@ public class CacheAwareUserService implements UserService {
 	}
 	
 	
-	/**
-	 * format the sites/permissions
-	 * site:permission1;permission2
-	 * @param site
-	 * @return
-	 */
-	protected String formatSitePermissions(UserSite site) {
-		StringBuilder buffer = new StringBuilder();
-		buffer.append(site.getName());
-		buffer.append("|");
-		int i=0;
-		for(String permission : site.getPermissions()) {
-			if(i>0)
-				buffer.append(";");
-			buffer.append(permission);
-			i++;
+	
+	
+	
+	protected User fromEntityUser(net.binggl.login.core.entity.User entityUser) {
+		List<Site> sites = new ArrayList<>();
+		if(entityUser.getSites() != null) {
+			for(UserSite entitySite : entityUser.getSites()) {
+				sites.add(
+					new SiteBuilder()
+						.name(entitySite.getName())
+						.url(entitySite.getUrl())
+						.permissions(entitySite.getPermissions())
+						.build());
+			}
 		}
-		return buffer.toString();
+		
+		User user = new UserBuilder()
+				.id(entityUser.getAlternativeId()) // do not use the internal database id to identify the user!
+				.displayName(entityUser.getDisplayName())
+				.userName(entityUser.getUserName())
+				.email(entityUser.getEmail())
+				.sites(sites)
+				.build();
+		
+		return user;
 	}
 }

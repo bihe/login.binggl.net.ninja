@@ -21,6 +21,12 @@ public interface TokenService {
 	void setCookie(Context context, String token);
 	
 	/**
+	 * remove the cookie from the context
+	 * @param context a Ninja Context
+	 */
+	void unsetCookie(Context context);
+	
+	/**
 	 * retrieve the token from the cookie
 	 * @param context a Ninja Context
 	 * @return the string form of the token
@@ -31,7 +37,7 @@ public interface TokenService {
 	 * verify the given token
 	 * @param token the token to verify
 	 * @param secret the signing secret
-	 * @return a User object when verification is correct
+	 * @return verification result
 	 */
-	User verifyToken(String token, String secret);
+	boolean verifyToken(String token, String secret);
 }

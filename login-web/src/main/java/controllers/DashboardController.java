@@ -25,13 +25,12 @@ public class DashboardController extends AbstractController {
 	
 	public Result list(Context context, @AuthenticatedUser User user) {
 		Result result = Results.ok();
-		net.binggl.login.core.entity.User lookupUser = this.getUserById(user.getId());
 		
-		if(lookupUser == null) {
-			logger.debug("Could not get the user by the given id {}", user.getId());
+		if(user == null) {
+			logger.debug("Could not get the user from the session!");
 			return Results.notFound().text().render("User not found");
 		}
-		result = Results.json().render(lookupUser);
+		result = Results.json().render(user);
 		
 		return result;
 	}

@@ -160,3 +160,35 @@ body {
 .jumbotron, .container .jumbotron {
   padding-top: 15px;
 }
+
+
+.row, .cardsection {
+	padding-top: 30px;
+}
+
+.cardsection {
+    margin-bottom: 30px;
+    text-align: center;
+}
+.cardsection h4 {
+    margin-bottom: 0;
+}
+.cardsection {
+    margin-bottom: 20px;
+}
+
+
+.delete-site {
+    position: absolute;
+    top: 0px;
+    left: 15px;
+    z-index: 1;
+    background: #555555;
+    padding: 5px;
+    color: white;
+    cursor: pointer; cursor: hand;
+}
+
+h2 > small {
+	color: #999;
+}

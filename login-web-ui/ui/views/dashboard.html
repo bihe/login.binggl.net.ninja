@@ -1,5 +1,35 @@
 <div ng-controller="userController as ctrl">
 
-<p>dashboard</p>
+
+<h2><i class="fa fa-user"></i> Permission Dashboard <small> {{ ctrl.user.displayName }}, {{ ctrl.user.email }}</small></h2>
+
+<p ng-if="ctrl.user.sitePermissions.length > 0" >Permissions are available for the following sites!</p>
+
+    <div class="row cardsection">
+        <div class="col-sm-6 col-md-3" ng-repeat="value in ctrl.user.sitePermissions">
+		    <div class="thumbnail">
+		
+			    <div class="delete-site" ng-if="vm.delete == true">
+			        <i class="fa fa-trash-o fa-2x" ng-click="ctrl.removePermissions(value.id)"></i>
+			    </div>
+			
+			    <div class="caption text-center">
+			         <p>
+			            <h3><i class="fa fa-external-link"></i> {{ value.name }}</h3>
+                        <br/>
+                        <a href="{{ value.url }}" title="{{ value.name }}">{{ value.url }}</a>.
+			         </p>
+			         <p>
+			         <span ng-repeat="perm in value.permissions">
+			             <span class="label label-primary">{{ perm }}</span>
+			         </span>
+			         
+			         </p>
+			    </div>
+			</div>
+        </div>
+    </div>
+
+
 
 </div>

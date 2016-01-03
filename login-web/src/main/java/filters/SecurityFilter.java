@@ -1,6 +1,7 @@
 package filters;
 
-import static net.binggl.login.core.Constants.*;
+import static net.binggl.login.core.Constants.AUTH_TOKEN_SECRET;
+import static net.binggl.login.core.Constants.CONFIG_BASE_PATH;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -8,7 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
-import net.binggl.login.core.models.User;
 import net.binggl.login.core.service.TokenService;
 import ninja.Context;
 import ninja.Filter;
@@ -51,12 +51,11 @@ public class SecurityFilter implements Filter {
 			}
 			logger.debug("Got a token from the context! " + token);
 			
-	        User user = tokenService.verifyToken(token, properties.getOrDie(AUTH_TOKEN_SECRET));
-	        if(user == null) {
+	        if(tokenService.verifyToken(token, properties.getOrDie(AUTH_TOKEN_SECRET)) == false) {
 	        	logger.warn("No user available, show view 403");
 				return getNoAccessResult(context, i18n.getMessage(context, "auth.user.invalid"));
 	        }
-	        logger.debug("Got a user from the token: {}", user);
+	        logger.debug("Token is verified!");
 		    
 		} catch (Throwable e) {
 			logger.error("Error during security filter check: " + e.getMessage(), e);

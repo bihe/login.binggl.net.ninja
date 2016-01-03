@@ -6,6 +6,7 @@
       , 'app.variables'
       , 'app.backend'
       , 'app.dashboard'
+      , 'app.auth'
       , 'hSweetAlert'                   // sweet alert: native alert replacement
 
     ])

@@ -26,4 +26,9 @@ public class TestingNinjaContext extends FakeContext {
 	public void addCookie(Cookie cookie) {
 		cookieStore.put(cookie.getName(), cookie);
 	}
+	
+	@Override
+    public void unsetCookie(Cookie cookie) {
+        cookieStore.remove(cookie.getName());       
+    }
 }

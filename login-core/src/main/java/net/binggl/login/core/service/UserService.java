@@ -10,4 +10,11 @@ public interface UserService {
 	 * @return a User object
 	 */
 	User findUserByEmail(String email);
+	
+	/**
+	 * retrieve the user by a given id
+	 * @param id the identifier of the user
+	 * @return a User object
+	 */
+	User findeUserByAlternativId(String id);
 }

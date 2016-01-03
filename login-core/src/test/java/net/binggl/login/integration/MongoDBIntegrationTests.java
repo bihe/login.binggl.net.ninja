@@ -6,9 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -23,9 +21,7 @@ import de.flapdoodle.embed.mongo.config.MongodConfigBuilder;
 import de.flapdoodle.embed.mongo.config.Net;
 import de.flapdoodle.embed.mongo.distribution.Version;
 import de.flapdoodle.embed.process.runtime.Network;
-import net.binggl.login.core.entity.Site;
 import net.binggl.login.core.entity.User;
-import net.binggl.login.core.repository.SiteRepository;
 import net.binggl.login.core.repository.UserRepository;
 import net.binggl.ninja.mongodb.MongoDB;
 import ninja.NinjaTest;
@@ -37,7 +33,6 @@ public class MongoDBIntegrationTests extends NinjaTest {
 	private static MongodExecutable mongodExe;
 	private static MongodProcess mongod;
 	
-	private static SiteRepository siteRepo;
 	private static UserRepository userRepo;
 	
 	@BeforeClass
@@ -62,15 +57,12 @@ public class MongoDBIntegrationTests extends NinjaTest {
     public void setup() throws Exception{
     	mongoDB = getInjector().getInstance(MongoDB.class);
     	mongoDB.deleteAll(User.class);
-    	mongoDB.deleteAll(Site.class);
     	
-    	siteRepo = getInjector().getInstance(SiteRepository.class);
     	userRepo = getInjector().getInstance(UserRepository.class);
     }
     
     @Test
     public void testInjector() {
-    	assertNotNull(siteRepo);
     	assertNotNull(userRepo);
     }
     
@@ -94,32 +86,5 @@ public class MongoDBIntegrationTests extends NinjaTest {
     	assertEquals("displayName1", saved.getDisplayName());
     	
     	assertTrue(saved.getCreated().before(saved.getModified()));
-    }
-    
-    @Test
-    public void saveSiteTest() {
-    	Site s = new Site();
-    	List<String> permissions = new ArrayList<>();
-    	permissions.add("a");
-    	permissions.add("b");
-    	s.setName("name");
-    	s.setUrl("url");
-    	s.setPermissions(permissions);
-    	
-    	Site saved = siteRepo.save(s);
-    	assertNotNull(saved);
-    	assertEquals("name", saved.getName());
-    	assertEquals("url", saved.getUrl());
-    	assertNotNull(saved.getPermissions());
-    	assertEquals(permissions.size(), saved.getPermissions().size());
-    	assertNotNull(saved.getId());
-    	
-    	assertTrue(saved.getCreated().before(new Date()));
-    	saved.setName("name1");
-    	saved = siteRepo.save(saved);
-    	assertEquals("name1", saved.getName());
-    	
-    	assertTrue(saved.getCreated().before(saved.getModified()));
-    }
-    
+    } 
 }

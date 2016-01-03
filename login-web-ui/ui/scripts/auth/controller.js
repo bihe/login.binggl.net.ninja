@@ -2,14 +2,14 @@
   'use strict';
 
   angular
-    .module('app.dashboard')
-    .controller('userController', ['backendService', 'sweet', userController]);
+    .module('app.auth')
+    .controller('authController', ['backendService', 'sweet', authController]);
 
   /**
    * the main logic of the dashboard
    * @constructor
    */
-  function userController(backendService, sweet) {
+  function authController(backendService, sweet) {
     /* jshint validthis: true */
     var vm = this;
 
@@ -24,7 +24,6 @@
     function load() {
       backendService.getUser().success(function(data) {
         vm.user = data;
-        console.debug(data);
       }).error( function(data, status, headers) {
         console.log('Error: ' + data);
         sweet.show('An error occured!', 'Could not load data from backend. Received status: ' + status, 'error');

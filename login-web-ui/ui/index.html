@@ -41,11 +41,11 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">login.binggl.net</a>
+          <a class="navbar-brand" href="#"><i class="fa fa-lock"></i> login.binggl.net</a>
         </div>
-        <div id="navbar" class="navbar-collapse collapse">
+        <div id="navbar" class="navbar-collapse collapse" ng-controller="authController as ctrl">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Logout</a></li>
+            <li><a href="/logout"><i class="fa fa-share"></i> Logout {{ ctrl.user.displayName }}</a></li>
           </ul>
         </div><!--/.navbar-collapse -->
       </div>
@@ -68,9 +68,9 @@
       
     </div>
     
-    <footer class="footer">
+    <footer class="footer hidden-md hidden-xs">
       <div class="container">
-        <p class="text-muted"> &copy; <app-year></app-year> Henrik Binggl | <i class="fa fa-cogs"></i> <app-title></app-title> application</p>
+        <p class="text-muted"> &copy; <app-year></app-year> Henrik Binggl | <i class="fa fa-lock"></i> <app-title></app-title> application</p>
       </div>
     </footer>
     
@@ -115,6 +115,8 @@
     <script src="scripts/services/backend.js"></script>
     <script src="scripts/dashboard/module.js"></script>
     <script src="scripts/dashboard/controller.js"></script>
+    <script src="scripts/auth/module.js"></script>
+    <script src="scripts/auth/controller.js"></script>
     <script src="scripts/main.js"></script>
     <!-- endbuild --> 
     

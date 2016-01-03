@@ -11,6 +11,10 @@ import net.binggl.login.core.exceptions.CacheKeyException;
 import net.binggl.login.core.service.CacheService;
 import ninja.cache.NinjaCache;
 
+/**
+ * cache implementation uses the provide cache of the NinjaFramework
+ * @author henrik
+ */
 public class NinjaCacheService implements CacheService {
 
 	private NinjaCache ninjaCache;
@@ -23,8 +27,7 @@ public class NinjaCacheService implements CacheService {
 
 	@Override
 	public <T> void put(String id, T object) {
-		if(StringUtils.isEmpty(id))
-			throw new CacheKeyException("The id is blank!");
+		this.check(id);
 		if(keys.containsKey(id))
 			throw new CacheKeyException("The id "  + id + " is not unique!");
 		
@@ -35,10 +38,8 @@ public class NinjaCacheService implements CacheService {
 	
 	@Override
 	public <T> void replace(String id, T object) {
-		if(StringUtils.isEmpty(id))
-			throw new CacheKeyException("The id is blank!");
-		if(!keys.containsKey(id))
-			throw new CacheKeyException("The id is not available: " + id + "!");
+		this.check(id);
+		this.checkIdExists(id);
 			
 		this.ninjaCache.replace(id, object);
 		
@@ -46,8 +47,7 @@ public class NinjaCacheService implements CacheService {
 
 	@Override
 	public <T> T get(String id, Class<T> clasz) {
-		if(StringUtils.isEmpty(id))
-			throw new CacheKeyException("The id is blank!");
+		this.check(id);
 		if(!this.keys.containsKey(id))
 			return null;
 		return this.ninjaCache.get(id, clasz);	
@@ -55,10 +55,8 @@ public class NinjaCacheService implements CacheService {
 
 	@Override
 	public <T> T remove(String id, Class<T> clasz) {
-		if(StringUtils.isEmpty(id))
-			throw new CacheKeyException("The id is blank!");
-		if(!keys.containsKey(id))
-			throw new CacheKeyException("The id is not available: " + id + "!");
+		this.check(id);
+		this.checkIdExists(id);
 		
 		T entry = this.get(id, clasz);
 		this.ninjaCache.replace(id, null);
@@ -69,10 +67,8 @@ public class NinjaCacheService implements CacheService {
 
 	@Override
 	public void invalidate(String id) {
-		if(StringUtils.isEmpty(id))
-			throw new CacheKeyException("The id is blank!");
-		if(!keys.containsKey(id))
-			throw new CacheKeyException("The id is not available: " + id + "!");
+		this.check(id);
+		this.checkIdExists(id);
 		
 		this.ninjaCache.set(id, null);
 		this.keys.remove(id);
@@ -82,5 +78,16 @@ public class NinjaCacheService implements CacheService {
 	public void clearAll() {
 		this.ninjaCache.clear();
 		this.keys.clear();
+	}
+	
+	
+	private void check(String id) {
+		if(id == null || StringUtils.isEmpty(id))
+			throw new CacheKeyException("The id is blank!");
+	}
+	
+	private void checkIdExists(String id) {
+		if(!keys.containsKey(id))
+			throw new CacheKeyException("The id is not available: " + id + "!");
 	}
 }

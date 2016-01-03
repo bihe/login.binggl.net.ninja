@@ -32,6 +32,7 @@ public class Routes implements ApplicationRoutes {
         router.GET().route("/startauth").with(NinjaOauthController.class, "startauth");
         router.GET().route("/oauth2callback").with(NinjaOauthController.class, "oauth2callback");
     	router.GET().route("/login").with(HomeController.class, "login");
+    	router.GET().route("/logout").with(HomeController.class, "logout");
         
         // dashboard routes
         router.GET().route("/dashboard/user").with(DashboardController.class, "list");

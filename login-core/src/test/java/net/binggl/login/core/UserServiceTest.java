@@ -7,9 +7,11 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -71,11 +73,13 @@ public class UserServiceTest {
 		assertEquals(ID, user.getId());
 		assertEquals(2, user.getSitePermissions().size());
 		
-		String permission1 = "site1|permission1;permission2";
-		String permission2 = "site2|permission3";
+		assertEquals("site1", user.getSitePermissions().get(0).getName());
+		assertEquals("http://www.example.com/1", user.getSitePermissions().get(0).getUrl());
+		assertEquals("permission1,permission2", StringUtils.join(user.getSitePermissions().get(0).getPermissions(), ","));
 		
-		assertEquals(permission1, user.getSitePermissions().get(0));
-		assertEquals(permission2, user.getSitePermissions().get(1));
+		assertEquals("site2", user.getSitePermissions().get(1).getName());
+		assertEquals("http://www.example.com/2", user.getSitePermissions().get(1).getUrl());
+		assertEquals("permission3", StringUtils.join(user.getSitePermissions().get(1).getPermissions(), ","));
 	}
 	
 	
@@ -84,7 +88,7 @@ public class UserServiceTest {
 		user.setCreated(new Date());
 		user.setDisplayName("Test User");
 		user.setEmail(EMAIL);
-		user.setId(ID);
+		user.setAlternativeId(ID);
 		user.setModified(new Date());
 		user.setUserName("username");
 		
@@ -93,19 +97,14 @@ public class UserServiceTest {
 		UserSite site1 = new UserSite();
 		site1.setName("site1");
 		site1.setUrl("http://www.example.com/1");
-		List<String> permissions = new ArrayList<>();
-		permissions.add("permission1");
-		permissions.add("permission2");
-		site1.setPermissions(permissions);
+		site1.setPermissions(Arrays.asList("permission1", "permission2"));
 		
 		sites.add(site1);
 		
 		UserSite site2 = new UserSite();
 		site2.setName("site2");
 		site2.setUrl("http://www.example.com/2");
-		permissions = new ArrayList<>();
-		permissions.add("permission3");
-		site2.setPermissions(permissions);
+		site2.setPermissions(Arrays.asList("permission3"));
 		
 		sites.add(site2);
 		

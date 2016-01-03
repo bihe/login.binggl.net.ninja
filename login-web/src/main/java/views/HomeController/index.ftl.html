@@ -20,6 +20,13 @@
                  <span>${flash.error}</span>
              </div>
              </#if>
+             
+            <#if (flash.success)??>
+            <div class="alert alert-info" role="alert">
+                 <i class="fa fa-info">&nbsp;</i>
+                 <span>${flash.success}</span>
+             </div>
+             </#if>
 	      	
 	      	
 	      </div>
@@ -63,7 +70,7 @@
     
     <footer class="footer">
       <div class="container">
-       <p class="text-muted"> &copy; ${year} Henrik Binggl | <i class="fa fa-cogs"></i> ${i18n("loginApplicationTitle")} application</p>
+       <p class="text-muted"> &copy; ${year} Henrik Binggl | <i class="fa fa-lock"></i> ${i18n("loginApplicationTitle")} application</p>
       </div>
     </footer>
     
