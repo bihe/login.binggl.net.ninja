@@ -1,8 +1,5 @@
 package controllers;
 
-import static net.binggl.login.core.Constants.SESSION_USER_ID;
-import static net.binggl.login.core.util.ExceptionHelper.logEx;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,11 +8,10 @@ import com.google.inject.Singleton;
 
 import extractors.AuthenticatedUser;
 import net.binggl.login.core.models.User;
-import net.binggl.login.core.service.TokenService;
+import net.binggl.login.core.service.LoginService;
 import ninja.Context;
 import ninja.Result;
 import ninja.Results;
-import ninja.session.FlashScope;
 
 
 /**
@@ -28,11 +24,11 @@ public class HomeController extends AbstractController {
 
     private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
     
-    private TokenService tokenService;
+    private LoginService loginService;
     
     @Inject
-    public HomeController(TokenService tokenService) {
-    	this.tokenService = tokenService;
+    public HomeController(LoginService loginService) {
+    	this.loginService = loginService;
     }
     
     public Result index(Context context, @AuthenticatedUser User user) {
@@ -48,16 +44,8 @@ public class HomeController extends AbstractController {
     } 
     
     public Result logout(Context context, @AuthenticatedUser User user) {
-    	logEx(() -> {
-    		FlashScope flashScope = context.getFlashScope();
-    		if(user == null) {
-        		flashScope.error("No user available to logout!");
-            } else {   
-	    		context.getSession().remove(SESSION_USER_ID);
-	        	this.tokenService.unsetCookie(context);
-	        	flashScope.success("User " + user.getDisplayName() + " loged out!");
-            }
-    	});
+    	boolean result = loginService.logout(user, context);
+    	logger.debug("Result from logout operation {}", result);
     	return this.processTemplateResult(Results.html().template("views/HomeController/index.ftl.html"));
     } 
 }

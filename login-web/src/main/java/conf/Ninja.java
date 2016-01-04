@@ -52,7 +52,7 @@ public class Ninja extends NinjaDefault implements ninja.Ninja {
 			if(MODE_DEVELOPMENT.equals(properties.get(APPLICATION_MODE))) {
 			
 				// init the db and the collections
-				this.initData.init(properties.get("ninja.mongodb.dbname"), "users", "sites");
+				this.initData.init(properties.get("ninja.mongodb.dbname"), "users", "logins");
 				// put some initial data into the database
 				this.initData.setupData();
 			}

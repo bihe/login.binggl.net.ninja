@@ -1,5 +1,6 @@
 package net.binggl.login.core.service;
 
+import net.binggl.login.core.models.Token;
 import net.binggl.login.core.models.User;
 import ninja.Context;
 
@@ -39,5 +40,5 @@ public interface TokenService {
 	 * @param secret the signing secret
 	 * @return verification result
 	 */
-	boolean verifyToken(String token, String secret);
+	Token verifyToken(String token, String secret);
 }

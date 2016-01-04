@@ -9,6 +9,7 @@ import static net.binggl.login.core.Constants.TOKEN_COOKIE_NAME;
 import static net.binggl.login.core.util.ExceptionHelper.wrapEx;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,8 @@ import com.auth0.jwt.JWTVerifier;
 import com.google.inject.Inject;
 
 import net.binggl.login.core.models.Site;
+import net.binggl.login.core.models.Token;
+import net.binggl.login.core.models.Token.TokenBuilder;
 import net.binggl.login.core.models.User;
 import net.binggl.login.core.service.TokenService;
 import ninja.Context;
@@ -33,6 +36,7 @@ public class NinjaJwtTokenService implements TokenService {
 	private static final String CLAIMS = "Claims";
 	private static final String TYPE = "Type";
 	private static final String TYPE_VALUE = "login.User";
+	private static final List<String> KEYS = Arrays.asList(USER_ID, USERNAME, DISPLAYNAME, EMAIL, CLAIMS, TYPE);
 
 	private NinjaProperties properties;
 
@@ -76,21 +80,29 @@ public class NinjaJwtTokenService implements TokenService {
 		return token;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public boolean verifyToken(String token, String secret) {
-		boolean result = false;
+	public Token verifyToken(String token, String secret) {
+		Token result = null;
 		JWTVerifier jwtVerifier = new JWTVerifier(secret);
 		
 		result = wrapEx(() -> {
 			Map<String, Object> payload = jwtVerifier.verify(token);
 			if (payload != null) {
-				if(payload.size() == 6 
+				if(payload.size() == KEYS.size() 
 						&& payload.get(TYPE) != null
 						&& TYPE_VALUE.equals(payload.get(TYPE))) {
-					return true;
+					
+					return new TokenBuilder()
+						.userId((String)payload.get(USER_ID))
+						.userName((String)payload.get(USERNAME))
+						.displayName((String)payload.get(DISPLAYNAME))
+						.email((String)payload.get(EMAIL))
+						.claims((List<String>)payload.get(CLAIMS))
+						.build();
 				}
 			}
-			return false;
+			return null;
 		});
 		
 		return result;

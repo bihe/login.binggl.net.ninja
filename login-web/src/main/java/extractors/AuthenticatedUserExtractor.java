@@ -1,16 +1,9 @@
 package extractors;
 
-import static net.binggl.login.core.Constants.SESSION_USER_ID;
-import static net.binggl.login.core.util.ExceptionHelper.logEx;
-
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.inject.Inject;
 
 import net.binggl.login.core.models.User;
-import net.binggl.login.core.service.UserService;
+import net.binggl.login.core.service.LoginService;
 import ninja.Context;
 import ninja.params.ArgumentExtractor;
 
@@ -20,30 +13,16 @@ import ninja.params.ArgumentExtractor;
  */
 public class AuthenticatedUserExtractor implements ArgumentExtractor<User> {
     
-	private static final Logger logger = LoggerFactory.getLogger(AuthenticatedUserExtractor.class);
-	
-	private UserService userService;
+	private LoginService loginService;
 	
 	@Inject
-	public AuthenticatedUserExtractor(UserService userService) {
-		this.userService = userService;
+	public AuthenticatedUserExtractor(LoginService loginService) {
+		this.loginService = loginService;
 	}
-	
 	
 	@Override
     public User extract(Context context) {
-		
-		return logEx(() -> {
-			
-			String userId = context.getSession().get(SESSION_USER_ID);
-			if(StringUtils.isEmpty(userId)) {
-				logger.info("Could not get a user from the session!");
-				return null;
-			}
-			logger.debug("Try to find user by id {}", userId);
-			User user = this.userService.findeUserByAlternativId(userId);
-		    return user;
-		});
+		return this.loginService.materializeUser(context);
     }
 
     @Override

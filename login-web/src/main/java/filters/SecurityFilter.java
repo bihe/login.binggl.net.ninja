@@ -1,15 +1,14 @@
 package filters;
 
-import static net.binggl.login.core.Constants.AUTH_TOKEN_SECRET;
 import static net.binggl.login.core.Constants.CONFIG_BASE_PATH;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
-import net.binggl.login.core.service.TokenService;
+import net.binggl.login.core.models.User;
+import net.binggl.login.core.service.LoginService;
 import ninja.Context;
 import ninja.Filter;
 import ninja.FilterChain;
@@ -29,12 +28,16 @@ public class SecurityFilter implements Filter {
 	private static final Logger logger = LoggerFactory
 			.getLogger(SecurityFilter.class);
 	
-	@Inject
-	private InternationalizationHelper i18n;
-	@Inject
 	private NinjaProperties properties;
+	private LoginService loginService;
+	private InternationalizationHelper i18n;
+	
 	@Inject
-	private TokenService tokenService;
+	public SecurityFilter(LoginService loginService, NinjaProperties properties, InternationalizationHelper i18n) {
+		this.loginService = loginService;
+		this.properties = properties;
+		this.i18n = i18n;
+	}
 	
 
 	@Override
@@ -43,19 +46,12 @@ public class SecurityFilter implements Filter {
 		logger.debug("start: security check.");
 
 		try {
-
-			String token = tokenService.getTokenFromCookie(context);
-			if(StringUtils.isEmpty(token)) {
-				logger.warn("No token available, show view 403");
-				return getNoAccessResult(context, i18n.getMessage(context, "auth.token.missing"));
-			}
-			logger.debug("Got a token from the context! " + token);
 			
-	        if(tokenService.verifyToken(token, properties.getOrDie(AUTH_TOKEN_SECRET)) == false) {
-	        	logger.warn("No user available, show view 403");
+			User user = this.loginService.materializeUser(context);
+			if(user == null) {
+				logger.warn("No user available, show view 403");
 				return getNoAccessResult(context, i18n.getMessage(context, "auth.user.invalid"));
-	        }
-	        logger.debug("Token is verified!");
+			}
 		    
 		} catch (Throwable e) {
 			logger.error("Error during security filter check: " + e.getMessage(), e);

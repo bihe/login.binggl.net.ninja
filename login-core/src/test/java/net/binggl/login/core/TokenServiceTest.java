@@ -24,6 +24,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import net.binggl.login.core.models.Site;
 import net.binggl.login.core.models.Site.SiteBuilder;
+import net.binggl.login.core.models.Token;
 import net.binggl.login.core.models.User;
 import net.binggl.login.core.models.User.UserBuilder;
 import net.binggl.login.core.service.TokenService;
@@ -66,8 +67,15 @@ public class TokenServiceTest {
 		token = tokenService.getToken(user, "secret");
 		assertNotNull(token);
 		
-		boolean verify = tokenService.verifyToken(token, "secret");
-		assertTrue(verify);
+		Token verify = tokenService.verifyToken(token, "secret");
+		assertNotNull(verify);
+		assertEquals("userName", verify.getUserName());
+		assertEquals("DisplayName", verify.getDisplayName());
+		assertEquals("a.b@c.de", verify.getEmail());
+		assertEquals("ABC", verify.getUserId());
+		assertNotNull(verify.getClaims());
+		assertEquals(2, verify.getClaims().size());
+		assertEquals("site1|http://www.site1.com|permission1;permission2", verify.getClaims().get(0));
 	}
 	
 	/**
