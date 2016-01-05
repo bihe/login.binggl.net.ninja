@@ -1,4 +1,4 @@
-package net.binggl.login.core.entity;
+package net.binggl.login.core.models;
 
 /**
  * define the possible login types

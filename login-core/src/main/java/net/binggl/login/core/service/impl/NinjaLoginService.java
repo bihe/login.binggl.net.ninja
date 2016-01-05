@@ -2,6 +2,7 @@ package net.binggl.login.core.service.impl;
 
 import static net.binggl.login.core.Constants.AUTH_TOKEN_SECRET;
 import static net.binggl.login.core.util.ExceptionHelper.logEx;
+import static net.binggl.login.core.util.ExceptionHelper.wrapEx;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -9,10 +10,13 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
+import net.binggl.login.core.entity.Login;
 import net.binggl.login.core.models.Token;
 import net.binggl.login.core.models.User;
+import net.binggl.login.core.repository.LoginRepository;
 import net.binggl.login.core.service.CacheService;
 import net.binggl.login.core.service.LoginService;
+import net.binggl.login.core.service.SessionService;
 import net.binggl.login.core.service.TokenService;
 import net.binggl.login.core.service.UserService;
 import ninja.Context;
@@ -26,32 +30,45 @@ import ninja.utils.NinjaProperties;
 public class NinjaLoginService implements LoginService {
 
 	private static final Logger logger = LoggerFactory.getLogger(NinjaLoginService.class);
-	private static final String SESSION_USER_ID = "session.user.id";
-	private static final String CACHE_KEY = "Cache.Login.User";
+	private static final String CACHE_PREFIX = "Cache.Login.User.";
 	
 	private UserService userService;
 	private TokenService tokenService;
 	private NinjaProperties properties;
 	private CacheService cache;
+	private LoginRepository loginRepo;
+	private SessionService sessionService;
 	
 	@Inject
-	public NinjaLoginService(UserService userService, TokenService tokenService, NinjaProperties properties, CacheService cache) {
+	public NinjaLoginService(UserService userService, TokenService tokenService, 
+			NinjaProperties properties, CacheService cache, LoginRepository loginRepo,
+			SessionService sessionService) {
 		this.userService = userService;
 		this.tokenService = tokenService;
 		this.properties = properties;
 		this.cache = cache;
+		this.loginRepo = loginRepo;
+		this.sessionService = sessionService;
 	}
 	
 	@Override
 	public boolean login(User user, Context context) {
-		return logEx(() -> {
+		return wrapEx(() -> {
 			if (user != null) {
 				String token = tokenService.getToken(user, properties.getOrDie(AUTH_TOKEN_SECRET));
 				logger.debug("Got a user {}  create a token and save the token {}", user, token);
 	
 				if (StringUtils.isNotEmpty(token)) {
 					tokenService.setCookie(context, token);
-					context.getSession().put(SESSION_USER_ID, user.getId());
+					this.sessionService.setUserId(context, user.getId());
+					
+					String loginType = this.sessionService.getLoginType(context);
+					
+					Login login = new Login();
+					login.setUserId(user.getId());
+					login.setUserName(user.getUserName());
+					login.setType(loginType);
+					this.loginRepo.save(login);
 					
 					return true;
 				}
@@ -66,8 +83,8 @@ public class NinjaLoginService implements LoginService {
 		return logEx(() -> {
 			
 			this.tokenService.unsetCookie(context);
-			context.getSession().clear();
-        	this.cache.clearAll();
+        	this.cache.clear(this.getCacheKey(CACHE_PREFIX, context));
+        	context.getSession().clear();
 			
     		FlashScope flashScope = context.getFlashScope();
     		if(user == null) {
@@ -81,9 +98,9 @@ public class NinjaLoginService implements LoginService {
 	}
 
 	@Override
-	public User materializeUser(Context context) {
+	public synchronized User materializeUser(Context context) {
 		User foundUser = null;
-		foundUser = this.cache.get(CACHE_KEY, User.class);
+		foundUser = this.cache.get(this.getCacheKey(CACHE_PREFIX, context), User.class);
 		
 		if(foundUser == null) {
 			logger.debug("User not found in cache - start lookup!");
@@ -92,7 +109,7 @@ public class NinjaLoginService implements LoginService {
 				User user = null;
 						
 				// 1. try it with a session id
-				String userId = context.getSession().get(SESSION_USER_ID);
+				String userId = this.sessionService.getUserId(context);
 				if(!StringUtils.isEmpty(userId)) {
 					logger.debug("Try to find user by id {}", userId);
 					user = this.userService.findeUserByAlternativId(userId);
@@ -121,7 +138,7 @@ public class NinjaLoginService implements LoginService {
 			});
 			
 			if(foundUser != null) {
-				this.cache.put(CACHE_KEY, foundUser);
+				this.cache.put(this.getCacheKey(CACHE_PREFIX, context), foundUser);
 				logger.debug("Found user-object, store it in cache {}", foundUser);
 			}
 		}
@@ -140,6 +157,10 @@ public class NinjaLoginService implements LoginService {
 		
         tokenObject = tokenService.verifyToken(token, properties.getOrDie(AUTH_TOKEN_SECRET));
         return tokenObject;
+	}
+	
+	protected String getCacheKey(String prefix, Context context) {
+		return prefix + context.getSession().getId();
 	}
 	
 	

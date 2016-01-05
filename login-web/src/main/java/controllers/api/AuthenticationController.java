@@ -1,6 +1,8 @@
-package controllers;
+package controllers.api;
 
 import javax.inject.Singleton;
+
+import controllers.AbstractController;
 
 /**
  * handel authentication requests by other applications

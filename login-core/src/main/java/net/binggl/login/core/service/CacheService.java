@@ -39,9 +39,16 @@ public interface CacheService {
 	
 	/**
 	 * invalidate the object with the given id
+	 * throws an exception if the id is not available
 	 * @param id
 	 */
 	void invalidate(String id);
+	
+	/**
+	 * invalidate the object with the given id
+	 * @param id
+	 */
+	void clear(String id);
 	
 	/**
 	 * clear the whole cache

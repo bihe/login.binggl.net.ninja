@@ -26,56 +26,66 @@ public class NinjaCacheService implements CacheService {
 	}
 
 	@Override
-	public <T> void put(String id, T object) {
+	public synchronized <T> void put(String id, T object) {
 		this.check(id);
 		if(keys.containsKey(id))
 			throw new CacheKeyException("The id "  + id + " is not unique!");
 		
 		this.ninjaCache.add(id, object);
 		this.keys.put(id, true);	
-		
 	}
 	
 	@Override
-	public <T> void replace(String id, T object) {
+	public synchronized <T> void replace(String id, T object) {
 		this.check(id);
 		this.checkIdExists(id);
 			
 		this.ninjaCache.replace(id, object);
-		
 	}
 
 	@Override
-	public <T> T get(String id, Class<T> clasz) {
+	public synchronized <T> T get(String id, Class<T> clasz) {
 		this.check(id);
 		if(!this.keys.containsKey(id))
 			return null;
-		return this.ninjaCache.get(id, clasz);	
+		T value = this.ninjaCache.get(id, clasz);
+		if(value == null) {
+			// the cache should not store null values!
+			// correct the entry
+			this.keys.remove(id);
+		}
+		return value;
 	}
 
 	@Override
-	public <T> T remove(String id, Class<T> clasz) {
+	public synchronized <T> T remove(String id, Class<T> clasz) {
 		this.check(id);
 		this.checkIdExists(id);
 		
 		T entry = this.get(id, clasz);
-		this.ninjaCache.replace(id, null);
+		this.ninjaCache.delete(id);
 		this.keys.remove(id);
 		
 		return entry;
 	}
 
 	@Override
-	public void invalidate(String id) {
+	public synchronized void invalidate(String id) {
 		this.check(id);
 		this.checkIdExists(id);
 		
-		this.ninjaCache.set(id, null);
+		this.ninjaCache.delete(id);
+		this.keys.remove(id);
+	}
+	
+	@Override
+	public synchronized void clear(String id) {
+		this.ninjaCache.delete(id);
 		this.keys.remove(id);
 	}
 
 	@Override
-	public void clearAll() {
+	public synchronized void clearAll() {
 		this.ninjaCache.clear();
 		this.keys.clear();
 	}

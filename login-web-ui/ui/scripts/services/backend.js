@@ -21,7 +21,7 @@
      * @returns {HttpPromise}
      */
     function getUser() {
-      return $http.get('/dashboard/user');
+      return $http.get('/api/user');
     }
   }
   ;

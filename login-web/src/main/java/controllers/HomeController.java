@@ -1,5 +1,7 @@
 package controllers;
 
+import static net.binggl.login.core.util.ExceptionHelper.logEx;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,40 +15,44 @@ import ninja.Context;
 import ninja.Result;
 import ninja.Results;
 
-
 /**
- * this is the "home/index" of the login logic.
- * if no valid session is available a login is shown,
- * otherwise the user is forwarded to the application dashboard
+ * this is the "home/index" of the login logic. if no valid session is available
+ * a login is shown, otherwise the user is forwarded to the application
+ * dashboard
  */
 @Singleton
 public class HomeController extends AbstractController {
 
-    private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
-    
-    private LoginService loginService;
-    
-    @Inject
-    public HomeController(LoginService loginService) {
-    	this.loginService = loginService;
-    }
-    
-    public Result index(Context context, @AuthenticatedUser User user) {
-        if(user == null) {
-            logger.debug("No authenticated user available show login screen!");
-            return this.processTemplateResult(Results.html());
-        }
-        return Results.redirect(this.getBaseUrl(context) + this.getBasePath() + "assets/index.html");
-    } 
-    
-    public Result login() {
-        return this.processTemplateResult(Results.html().template("views/HomeController/index.ftl.html"));
-    } 
-    
-    public Result logout(Context context, @AuthenticatedUser User user) {
-    	boolean result = loginService.logout(user, context);
-    	logger.debug("Result from logout operation {}", result);
-    	return this.processTemplateResult(Results.html().template("views/HomeController/index.ftl.html"));
-    } 
+	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
+	
+	private LoginService loginService;
+
+	@Inject
+	public HomeController(LoginService loginService) {
+		this.loginService = loginService;
+	}
+
+	public Result index(Context context, @AuthenticatedUser User user) {
+		if (user == null) {
+			return getNoAccessResult(context);
+		}
+		return Results.redirect(this.getBaseUrl(context) + this.getBasePath() + "assets/index.html");
+	}
+
+	public Result login() {
+		return this.processTemplateResult(Results.html().template("views/HomeController/index.ftl.html"));
+	}
+
+	public Result logout(Context context, @AuthenticatedUser User user) {
+		Result result = logEx(() -> {
+			if (user == null) {
+				return getNoAccessResult(context);
+			}
+			boolean logout = loginService.logout(user, context);
+			logger.debug("Result from logout operation {}", logout);
+			return this.processTemplateResult(Results.html().template("views/HomeController/index.ftl.html"));
+		});
+		return result != null ? result
+				: this.processTemplateResult(Results.html().template("views/HomeController/index.ftl.html"));
+	}
 }
- 

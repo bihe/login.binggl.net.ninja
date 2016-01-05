@@ -15,7 +15,7 @@ public class Login extends BaseEntity {
 	@Property("Type")
 	private String type;
 	
-	private Login() {
+	public Login() {
 		super();
 	}
 	

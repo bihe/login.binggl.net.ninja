@@ -1,9 +1,9 @@
 <div ng-controller="userController as ctrl">
 
 
-<h2><i class="fa fa-user"></i> Permission Dashboard <small> {{ ctrl.user.displayName }}, {{ ctrl.user.email }}</small></h2>
+<h2><i class="fa fa-user"></i> Permission Dashboard <small class="hidden-md hidden-xs"> {{ ctrl.user.displayName }}, {{ ctrl.user.email }}</small></h2>
 
-<p ng-if="ctrl.user.sitePermissions.length > 0" >Permissions are available for the following sites!</p>
+<p class="hidden-md hidden-xs" ng-if="ctrl.user.sitePermissions.length > 0" >Permissions are available for the following sites!</p>
 
     <div class="row cardsection">
         <div class="col-sm-6 col-md-3" ng-repeat="value in ctrl.user.sitePermissions">

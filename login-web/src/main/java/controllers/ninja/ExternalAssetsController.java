@@ -1,4 +1,4 @@
-package controllers;
+package controllers.ninja;
 
 import java.io.File;
 import java.io.IOException;
