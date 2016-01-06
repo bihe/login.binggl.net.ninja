@@ -3,13 +3,13 @@
 
   angular
     .module('app.dashboard')
-    .controller('userController', ['backendService', 'sweet', userController]);
+    .controller('userController', ['sweet', 'sharedObjects', userController]);
 
   /**
    * the main logic of the dashboard
    * @constructor
    */
-  function userController(backendService, sweet) {
+  function userController(sweet, sharedObjects) {
     /* jshint validthis: true */
     var vm = this;
 
@@ -22,13 +22,10 @@
      * load the user
      */
     function load() {
-      backendService.getUser().success(function(data) {
+      sharedObjects.getUser().then(function(data) {
         vm.user = data;
-        console.debug(data);
-      }).error( function(data, status, headers) {
-        console.log('Error: ' + data);
-        sweet.show('An error occured!', 'Could not load data from backend. Received status: ' + status, 'error');
-        
+      }, function(reason) {
+        sweet(reason, 'error');
       });
     }
   }

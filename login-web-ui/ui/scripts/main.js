@@ -5,6 +5,7 @@
     .module('loginApp', [ 'ui.router'
       , 'app.variables'
       , 'app.backend'
+      , 'app.objects'
       , 'app.dashboard'
       , 'app.auth'
       , 'hSweetAlert'                   // sweet alert: native alert replacement
@@ -36,5 +37,9 @@
         $rootScope.$on('$routeChangeStart', function(event, next, current) {
 
         });
+        
+        
+        
       }]);
+  
 })(window, angular);

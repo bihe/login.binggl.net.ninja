@@ -1,12 +1,40 @@
-<#import "../layout/system.layout.ftl.html" as layout> 
-<@layout.systemLayout i18n("system.error500")>    
-
-	<h1>${i18n("system.error500")}!</h1>
-    <p>${i18n("system.error500.message")}.</p>
-    <br/>
-	<#if (message)??>
-    <p>${message}</p>
-    </#if>
+<#import "../layout/defaultLayout.ftl.html" as layout> 
+<@layout.master
+    '${i18n("loginApplicationTitle")} : ${i18n("system.error500")}' 
+    '<link href="${basepath}assets/static/css/login.css" rel="stylesheet">'
+>
+  
+    <div class="container">
+    <div class="jumbotron">
+	    <h1><span class="glyphicon glyphicon-fire red"></span> ${i18n("system.error500")}</h1>
+	    <p class="lead">${i18n("system.error500.message")}.</p>
+	    <a href="javascript:document.location.reload(true);" class="btn btn-default btn-lg text-center"><span class="green">Try This Page Again</span></a>
+	  </div>
+	</div>
+	<div class="container">
+	  <div class="body-content">
+	    <div class="row">
+	      <div class="col-md-12">
+	        <h2>What happened?</h2>
+	        <p class="lead">A 500 error status implies there is a problem with the web server's software causing it to malfunction.</p>
+	        <#if (message)??>
+	         <div class="alert alert-danger" role="alert">
+                 <i class="fa fa-times-circle">&nbsp;</i> <span>${message}</span>
+             </div>
+            
+            </#if>
+	      </div>
+	     
+	    </div>
+	  </div>
+    </div>
+    
+    
+    <footer class="footer hidden-md hidden-xs">
+      <div class="container">
+       <p class="text-muted"> &copy; ${year} Henrik Binggl | <i class="fa fa-lock"></i> ${i18n("loginApplicationTitle")} application</p>
+      </div>
+    </footer>
 	
 
-</@layout.systemLayout>
+</@layout.master>

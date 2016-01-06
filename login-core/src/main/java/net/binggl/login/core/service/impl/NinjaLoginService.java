@@ -4,6 +4,9 @@ import static net.binggl.login.core.Constants.AUTH_TOKEN_SECRET;
 import static net.binggl.login.core.util.ExceptionHelper.logEx;
 import static net.binggl.login.core.util.ExceptionHelper.wrapEx;
 
+import java.net.URL;
+import java.util.Optional;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 
 import net.binggl.login.core.entity.Login;
+import net.binggl.login.core.models.Site;
 import net.binggl.login.core.models.Token;
 import net.binggl.login.core.models.User;
 import net.binggl.login.core.repository.LoginRepository;
@@ -145,6 +149,53 @@ public class NinjaLoginService implements LoginService {
 		
 		return foundUser;
 	}
+	
+	@Override
+	public boolean isValidRedirectUrl(User user, String siteName, String redirectUrl) {
+		Boolean result = false;
+		result = logEx(() -> {
+
+			logger.debug("Find the site {} and check the redirect-url {}", siteName, redirectUrl);
+			
+			// find the permissions of the given user
+			Optional<Site> entry = user.getSitePermissions().stream().filter(s -> siteName.equals(s.getName())).findFirst();
+			if(entry.isPresent()) {
+				// match the given URL
+				// the redirect-URL must start with the url defined for the given site
+				URL site = new URL(entry.get().getUrl());
+				URL redirect = new URL(redirectUrl);
+				
+				if(site.getProtocol().equals(redirect.getProtocol())
+						&& site.getHost().equals(redirect.getHost())
+						&& site.getPort() == redirect.getPort()) {
+					
+					logger.debug("Matching of url succeeded for protocol/host/port site: {}, redirect: {}", site, redirect);
+					
+					// specifically check the path
+					String sitePath = site.getPath();
+					if(StringUtils.isEmpty(sitePath)) {
+						return true;
+					}
+					String redirectPath = redirect.getPath();
+					
+					logger.debug("The redirect url starts with the same path as the site-url. site: {}, redirect: {}", sitePath, redirectPath);
+					
+					if(redirectPath.startsWith(sitePath)) {
+						return true;
+					}
+				}
+						
+			}
+			
+			logger.debug("Could not find a site with the given name or the redirect url did not match!");
+			
+			return false;
+		});
+		return result;
+	}
+	
+	
+	
 
 	protected Token getTokenFromContext(Context context) {
 		Token tokenObject = null;
@@ -162,6 +213,4 @@ public class NinjaLoginService implements LoginService {
 	protected String getCacheKey(String prefix, Context context) {
 		return prefix + context.getSession().getId();
 	}
-	
-	
 }

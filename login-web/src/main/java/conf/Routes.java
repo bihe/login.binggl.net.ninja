@@ -2,6 +2,7 @@ package conf;
 
 import controllers.HomeController;
 import controllers.api.DashboardController;
+import controllers.flow.AuthenticationController;
 import controllers.ninja.ExternalAssetsController;
 import net.binggl.ninja.oauth.NinjaOauthController;
 import ninja.Router;
@@ -18,8 +19,9 @@ public class Routes implements ApplicationRoutes {
     	router.GET().route("/login").with(HomeController.class, "login");
     	router.GET().route("/logout").with(HomeController.class, "logout");
         
-        // dashboard routes
         router.GET().route("/api/user").with(DashboardController.class, "currentUser");
+        router.GET().route("/auth/flow").with(AuthenticationController.class, "startFlow");
+        
                         
         // static content
         router.GET().route("/assets/{fileName: .*}").with(ExternalAssetsController.class, "serveStatic");
@@ -27,6 +29,10 @@ public class Routes implements ApplicationRoutes {
         ///////////////////////////////////////////////////////////////////////
         // Index / Catchall shows index page
         ///////////////////////////////////////////////////////////////////////
+        
+        router.GET().route("/403*").with(HomeController.class, "show403");
+        router.GET().route("/404*").with(HomeController.class, "show404");
+        
         router.GET().route("/.*").with(HomeController.class, "index");
     }
 

@@ -27,4 +27,13 @@ public interface LoginService {
 	 * @return result of login
 	 */
 	boolean logout(User user, Context context);
+	
+	/**
+	 * check if the supplied url is valid for the given user
+	 * @param user a user object
+	 * @param siteName the name of the originating site
+	 * @param redirectUrl the redirect url of the orginiating site
+	 * @return
+	 */
+	boolean isValidRedirectUrl(User user, String siteName, String redirectUrl);
 }

@@ -1,8 +1,50 @@
-<#import "../layout/system.layout.ftl.html" as layout> 
-<@layout.systemLayout i18n("system.error404")>    
+<#import "../layout/defaultLayout.ftl.html" as layout> 
+<@layout.master
+    '${i18n("loginApplicationTitle")} : ${i18n("system.error500")}' 
+    '<link href="${basepath}assets/static/css/login.css" rel="stylesheet">'
+>
+  
+    <div class="container">
+	  <!-- Jumbotron -->
+	  <div class="jumbotron">
+	    <h1><i class="fa fa-frown-o red"></i> ${i18n("system.error404")}!</h1>
+	    <p class="lead">${i18n("system.error404.message")}.</p>
+	    <p><a onclick=javascript:checkSite(); class="btn btn-default btn-lg"><span class="green">Take Me To The Homepage</span></a>
+	        <script type="text/javascript">
+	            function checkSite(){
+	              var currentSite = window.location.hostname;
+	                window.location = "http://" + currentSite;
+	            }
+	        </script>
+	    </p>
+	  </div>
+	</div>
+	<div class="container">
+	  <div class="body-content">
+	    <div class="row">
+	      <div class="col-md-6">
+	        <h2>What happened?</h2>
+	        <p class="lead">A 404 error status implies that the file or page that you're looking for could not be found.</p>
+	        
+	        <div class="alert alert-warning" role="alert"> <strong>Not found!</strong> ${i18n("system.error404.message")}. </div>
+	        
+	      </div>
+	      <div class="col-md-6">
+	        <h2>What can I do?</h2>
+	        <p class="lead">If you're a site vistor</p>
+	        <p>Please use your browsers back button and check that you're in the right place. If you need immediate assistance, please send us an email instead.</p>
+	       
+	     </div>
+	    </div>
+	  </div>
+	</div>
+    
+    
+    <footer class="footer hidden-md hidden-xs">
+      <div class="container">
+       <p class="text-muted"> &copy; ${year} Henrik Binggl | <i class="fa fa-lock"></i> ${i18n("loginApplicationTitle")} application</p>
+      </div>
+    </footer>
+    
 
-	<h1>${i18n("system.error404")}!</h1>
-    <p>${i18n("system.error404.message")}.</p>
-    <br/>
-
-</@layout.systemLayout>
+</@layout.master>
