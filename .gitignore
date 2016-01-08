@@ -72,3 +72,5 @@ $RECYCLE.BIN/
 login-web/src/main/java/conf/application.conf
 login-web-ui/ui-dist.zip
 login-web/dependency-reduced-pom.xml
+production.conf
+logback_production.xml
