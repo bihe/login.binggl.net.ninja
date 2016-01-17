@@ -17,59 +17,37 @@ import net.binggl.login.core.repository.UserRepository;
 import net.binggl.login.core.service.CacheService;
 import net.binggl.login.core.service.UserService;
 
-public class CacheAwareUserService implements UserService {
+public class UserServiceImpl implements UserService {
 
-	private static final Logger logger = LoggerFactory.getLogger(CacheAwareUserService.class);
-	
-	private static final String PREFIX = "Cache.User.";
-	
+	private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 	private UserRepository userRepo;
-	private CacheService cacheService;
 	
 	@Inject
-	public CacheAwareUserService(UserRepository userRepo, CacheService cache) {
+	public UserServiceImpl(UserRepository userRepo, CacheService cache) {
 		this.userRepo = userRepo;
-		this.cacheService = cache;
 	}
 	
 	@Override
-	public User findeUserByAlternativId(String alternativeId) {
-		User user = this.cacheService.get(PREFIX + alternativeId, User.class);
-		if(user == null) {
-			logger.debug("Cache miss, use repository to query user!");
-			
-			net.binggl.login.core.entity.User entityUser = userRepo.getUserByAlternativeId(alternativeId);
-			if(entityUser != null) {
-				user = fromEntityUser(entityUser);
-				this.cacheService.put(PREFIX + alternativeId, user);
-				return user;
-			}
-			
+	public User findUserByAlternativId(String alternativeId) {
+		logger.debug("Find user by altId {}", alternativeId);
+		net.binggl.login.core.entity.User entityUser = userRepo.getUserByAlternativeId(alternativeId);
+		if(entityUser != null) {
+			User user = fromEntityUser(entityUser);
+			return user;
 		}
-		return user;
+		return null;
 	}
 	
 	@Override
 	public User findUserByEmail(String email) {
-		logger.debug("Find a user by the given email {}", email);
-		
-		User user = this.cacheService.get(PREFIX + email, User.class);
-		if(user == null) {
-			logger.debug("Cache miss, use repository to query user!");
-		
-			net.binggl.login.core.entity.User entityUser = userRepo.getUserByEmail(email);
-			if(entityUser != null) {
-				user = fromEntityUser(entityUser);
-				this.cacheService.put(PREFIX + email, user);
-				return user;
-			}
+		logger.debug("Find user by email {}", email);
+		net.binggl.login.core.entity.User entityUser = userRepo.getUserByEmail(email);
+		if(entityUser != null) {
+			User user = fromEntityUser(entityUser);
+			return user;
 		}
-		
-		return user;
+		return null;
 	}
-	
-	
-	
 	
 	
 	protected User fromEntityUser(net.binggl.login.core.entity.User entityUser) {

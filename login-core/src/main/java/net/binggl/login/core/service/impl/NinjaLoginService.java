@@ -116,7 +116,7 @@ public class NinjaLoginService implements LoginService {
 				String userId = this.sessionService.getUserId(context);
 				if(!StringUtils.isEmpty(userId)) {
 					logger.debug("Try to find user by id {}", userId);
-					user = this.userService.findeUserByAlternativId(userId);
+					user = this.userService.findUserByAlternativId(userId);
 				}
 				
 				// 2. get the data from the token
@@ -135,7 +135,7 @@ public class NinjaLoginService implements LoginService {
 					// 3. load the user with the given id
 					userId = token.getUserId();
 					logger.debug("Try to find user by id {}", userId);
-					user = this.userService.findeUserByAlternativId(userId);
+					user = this.userService.findUserByAlternativId(userId);
 				}
 				
 			    return user;

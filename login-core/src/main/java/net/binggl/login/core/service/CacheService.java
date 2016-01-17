@@ -15,6 +15,14 @@ public interface CacheService {
 	<T> void put(String id, T object);
 	
 	/**
+	 * add a new entry to the cache
+	 * @param id unique id for a cache entry
+	 * @param object the object to put into the cache
+	 * @param the duration of cache availability e.g.: 10s, 3mn, 8h
+	 */
+	<T> void put(String id, T object, String duration);
+	
+	/**
 	 * replace an existing entry available in the cache
 	 * @param id unique id for a cache entry
 	 * @param object the object to put into the cache

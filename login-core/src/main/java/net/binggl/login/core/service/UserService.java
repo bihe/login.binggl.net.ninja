@@ -16,5 +16,5 @@ public interface UserService {
 	 * @param id the identifier of the user
 	 * @return a User object
 	 */
-	User findeUserByAlternativId(String id);
+	User findUserByAlternativId(String id);
 }

@@ -23,7 +23,7 @@ import net.binggl.login.core.entity.UserSite;
 import net.binggl.login.core.repository.UserRepository;
 import net.binggl.login.core.service.CacheService;
 import net.binggl.login.core.service.UserService;
-import net.binggl.login.core.service.impl.CacheAwareUserService;
+import net.binggl.login.core.service.impl.UserServiceImpl;
 import ninja.Context;
 import ninja.util.TestingNinjaContext;
 
@@ -55,7 +55,7 @@ public class UserServiceTest {
 			return null;
 		}).when(cacheService).get(EMAIL, net.binggl.login.core.models.User.class);
 		
-		userService = new CacheAwareUserService(userRepo, cacheService);
+		userService = new UserServiceImpl(userRepo, cacheService);
 	}
 	
 	/**

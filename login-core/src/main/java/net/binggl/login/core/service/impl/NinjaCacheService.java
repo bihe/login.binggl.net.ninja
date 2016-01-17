@@ -26,13 +26,21 @@ public class NinjaCacheService implements CacheService {
 	}
 
 	@Override
-	public synchronized <T> void put(String id, T object) {
+	public synchronized <T> void put(String id, T object, String duration) {
 		this.check(id);
 		if(keys.containsKey(id))
 			throw new CacheKeyException("The id "  + id + " is not unique!");
-		
-		this.ninjaCache.add(id, object);
-		this.keys.put(id, true);	
+		if(StringUtils.isEmpty(duration)) {
+			this.ninjaCache.add(id, object); // store forever	
+		} else {
+			this.ninjaCache.add(id, object, duration);
+		}
+		this.keys.put(id, true);
+	}
+	
+	@Override
+	public synchronized <T> void put(String id, T object) {
+		this.put(id,  object, null);
 	}
 	
 	@Override
