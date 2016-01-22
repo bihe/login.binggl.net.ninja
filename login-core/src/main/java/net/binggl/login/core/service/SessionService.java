@@ -5,6 +5,12 @@ import ninja.Context;
 public interface SessionService {
 
 	/**
+	 * clear the whole sessiion
+	 * @param context
+	 */
+	void clear(Context context);
+	
+	/**
 	 * set the userid in the session
 	 * @param context a NinjaFramework context
 	 * @param id

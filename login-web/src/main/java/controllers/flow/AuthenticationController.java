@@ -72,6 +72,7 @@ public class AuthenticationController extends AbstractController {
 		
 		} catch(Exception EX) {
 			logger.error("Error occured during authentication flow {}", EX.getMessage());
+			this.sessionService.clear(context);
 			result = this.getErrorResult(EX);
 		}
 		return result;

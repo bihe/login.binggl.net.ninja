@@ -1,5 +1,8 @@
 package net.binggl.login.core.service.impl;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.base.Preconditions;
@@ -14,6 +17,12 @@ public class NinjaSessionService implements SessionService {
 	private static final String SESSION_LOGIN_TYPE = "session.login.type";
 	private static final String SESSION_AUTH_FLOW_SITE_NAME = "session.auth.flow.site.name";
 	private static final String SESSION_AUTH_FLOW_SITE_URL = "session.auth.flow.site.url";
+	
+	private static final List<String> SESSION_PARAMETERS = Arrays.asList(
+			SESSION_USER_ID, 
+			SESSION_AUTH_FLOW_SITE_NAME, 
+			SESSION_AUTH_FLOW_SITE_URL, 
+			SESSION_LOGIN_TYPE);
 	
 	@Override
 	public void setUserId(Context context, String id) {
@@ -81,5 +90,12 @@ public class NinjaSessionService implements SessionService {
 	@Override
 	public void removeAuthFlowUrl(Context context) {
 		context.getSession().remove(SESSION_AUTH_FLOW_SITE_URL);
+	}
+
+	@Override
+	public void clear(Context context) {
+		SESSION_PARAMETERS.stream().forEach((param) -> {
+			context.getSession().remove(param);
+		});
 	}	
 }

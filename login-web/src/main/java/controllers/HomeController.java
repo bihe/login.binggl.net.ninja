@@ -53,11 +53,7 @@ public class HomeController extends AbstractController {
 				
 				if(this.loginService.isValidRedirectUrl(user, siteName, returnUrl)) {
 					logger.debug("Will redirect to url {}", returnUrl);
-					
-					this.sessionService.removeAuthFlowSiteName(context);
-					this.sessionService.removeAuthFlowUrl(context);
-					this.sessionService.removeLoginType(context);
-					
+					this.sessionService.clear(context);
 					return Results.redirect(returnUrl);
 				}
 				throw new IllegalArgumentException("Permissions missing or redirect url is not valid!");
@@ -66,6 +62,7 @@ public class HomeController extends AbstractController {
 		
 		} catch(Exception EX) {
 			logger.error("Error occured during authentication flow {}, stack: {}", EX.getMessage(), EX);
+			this.sessionService.clear(context);
 			return this.getErrorResult(EX);
 		}
 		
