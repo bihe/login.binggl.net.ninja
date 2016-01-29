@@ -66,7 +66,7 @@ public class HomeController extends AbstractController {
 			return this.getErrorResult(EX);
 		}
 		
-		return Results.redirect(this.getBaseUrl(context) + this.getBasePath() + "assets/index.html");
+		return Results.redirect(this.getBaseUrl(context) + this.getBasePath() + "ui/index.html");
 	}
 
 	public Result login(Context context) {

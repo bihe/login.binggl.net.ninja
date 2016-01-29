@@ -19,9 +19,11 @@ import com.google.common.io.ByteStreams;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import filters.SecurityFilter;
 import ninja.AssetsController;
 import ninja.AssetsControllerHelper;
 import ninja.Context;
+import ninja.FilterWith;
 import ninja.Renderable;
 import ninja.Result;
 import ninja.Results;
@@ -39,6 +41,7 @@ import ninja.utils.ResponseStreams;
  * @author henrik
  */
 @Singleton
+@FilterWith(SecurityFilter.class)
 public class ExternalAssetsController extends AssetsController {
 
 	private static final Logger logger = LoggerFactory.getLogger(ExternalAssetsController.class);
@@ -76,7 +79,7 @@ public class ExternalAssetsController extends AssetsController {
 		};
 		return Results.ok().render(renderable);
 	}
-
+	
 	private static String getFileNameFromPathOrReturnRequestPath(Context context) {
 
 		String fileName = context.getPathParameter(FILENAME_PATH_PARAM);

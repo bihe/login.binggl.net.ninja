@@ -61,18 +61,13 @@ public abstract class AbstractController {
 		result.render(renderObjects);
 		return result.html().template("/views/system/500error.ftl.html");
 	}
-
-	
-	
 	
 	private Result getNoAccessResult(Context context, String message) {
 		Result r = Results.ok();
-		
 		context.getSession().clear();
 		FlashScope flashScope = context.getFlashScope();
 		flashScope.error(message);
 		r = Results.redirect(properties.get(CONFIG_BASE_PATH) + "403");
-		
 		return r;
 	}
 		
@@ -82,5 +77,4 @@ public abstract class AbstractController {
 		renderObjects.put(YEAR, new DateTime().getYear());
 		return renderObjects;
 	}
-
 }
